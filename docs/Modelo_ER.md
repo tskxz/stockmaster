@@ -29,3 +29,6 @@ quantidade
 data_movimento  
 observacao  
 produto_id (FK → Produto.id)  
+
+## Diagrama
+![diagrama](./stockmaster_page.drawio.png)
