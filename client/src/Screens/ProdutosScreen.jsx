@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { ListGroup, Container, Row, Col, Alert } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { ListGroup, Container, Row, Col, Alert, Button } from 'react-bootstrap';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const ProdutosScreen = () => {
   const { armazemId } = useParams(); // Obter o ID do armazém da URL
   const [produtos, setProdutos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProdutos = async () => {
@@ -40,9 +41,16 @@ const ProdutosScreen = () => {
 
   return (
     <Container>
-      <Row>
+      <Row className="mb-4">
         <Col>
           <h2>Produtos do Armazém</h2>
+          <Button variant="primary" onClick={() => navigate(`/adicionar_produto/${armazemId}`)}>
+            Adicionar Produto
+          </Button>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
           {produtos.length === 0 ? (
             <Alert variant="info">Não há produtos cadastrados neste armazém.</Alert>
           ) : (

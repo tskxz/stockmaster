@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ListGroup, Container, Row, Col, Alert, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate  } from 'react-router-dom';
+
 
 const MeusArmazensScreen = () => {
   const [armazens, setArmazens] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchArmazens = async () => {
@@ -39,9 +41,17 @@ const MeusArmazensScreen = () => {
 
   return (
     <Container>
+      <Row className="mb-4">
+        <Col>
+        <h2>Meus Armazéns</h2>
+          <Button variant="primary" onClick={() => navigate("/criararmazem")}>
+            Criar Armazém
+          </Button>
+        </Col>
+      </Row>
       <Row>
         <Col>
-          <h2>Meus Armazéns</h2>
+          
           {armazens.length === 0 ? (
             <Alert variant="info">Você não tem armazéns cadastrados.</Alert>
           ) : (
@@ -60,12 +70,7 @@ const MeusArmazensScreen = () => {
             </ListGroup>
           )}
 
-          {/* Botão para criar um novo armazém */}
-          <Link to="/criararmazem">
-            <Button variant="primary" className="mt-3">
-              Criar Armazém
-            </Button>
-          </Link>
+          
         </Col>
       </Row>
     </Container>
