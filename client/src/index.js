@@ -10,6 +10,8 @@ import SignupScreen from './Screens/SignupScreen';
 import HomeScreen from './Screens/HomeScreen';
 import MeusArmazens from './Screens/MeusArmazensScreen';
 import PrivateRoute from './components/PrivateRoute';
+import ProdutosScreen from './Screens/ProdutosScreen';
+import CriarArmazemScreen from './Screens/CriarArmazemScreen';
 
 
 const router = createBrowserRouter(
@@ -22,6 +24,9 @@ const router = createBrowserRouter(
         {/* Rota privada */}
         <Route element={<PrivateRoute />}>
           <Route path="/meus_armazens" element={<MeusArmazens />} />
+          <Route path="/produtos/:armazemId" element={<ProdutosScreen />} />
+          <Route path="/criararmazem" element={<CriarArmazemScreen />} />
+
         </Route>
     </Route>
   )

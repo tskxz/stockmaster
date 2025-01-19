@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,6 +6,13 @@ const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      navigate('/meus_armazens'); // Redireciona se o token estiver presente
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,6 +42,11 @@ const LoginScreen = () => {
     } catch (error) {
       console.error('Erro ao entrar a conta:', error);
       alert('Erro ao se conectar com o servidor.');
+    }
+
+    if (localStorage.getItem('jwt')) {
+      navigate('/meus_armazens');
+      return null; // Retorna null para não renderizar a página de login
     }
   };
 
