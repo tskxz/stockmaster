@@ -7,7 +7,9 @@ const criarArmazem = async function criarArmazem(req, res) {
   
       // Criar um novo armazém vinculado à empresa autenticada
       const novoArmazem = await Armazem.create({
-        nome: req.body.nomeArmazem,
+        nome: req.body.nome,
+        endereco: req.body.endereco,
+        capacidade: req.body.capacidade,
         empresa: empresaId,
       });
   
