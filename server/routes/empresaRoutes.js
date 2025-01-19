@@ -3,6 +3,7 @@ const Empresa = require("../models/Empresa");
 const empresaController = require("../controllers/empresaController");
 const authController = require("../controllers/authController");
 const armazemController = require("../controllers/armazemController");
+const produtoController = require("../controllers/produtoController");
 
 const router = express.Router();
 
@@ -20,6 +21,24 @@ router.get(
   "/meus_armazens",
   authController.protect,
   armazemController.getArmazensPorEmpresaAutenticada
+);
+
+router.post(
+  "/criar_produto",
+  authController.protect,
+  produtoController.criarProduto
+);
+
+router.get(
+  "/produtos/:armazemId",
+  authController.protect,
+  produtoController.getProdutosByArmazem
+);
+
+router.get(
+  "/produto/:produtoId",
+  authController.protect,
+  produtoController.getProduto
 );
 
 
