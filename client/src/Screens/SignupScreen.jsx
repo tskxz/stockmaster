@@ -1,23 +1,48 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const SignupScreen = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== passwordConfirm) {
       alert('As senhas não coincidem!');
-    } else {
-      // TODO: Lógica para criar conta (enviar para o backend, etc.)
-      console.log('Conta criada com sucesso!');
-      console.log('Nome:', name);
-      console.log('Email:', email);
-      console.log('Password:', password);
+      return;
+    }  try {
+      // TODO: usar proxy
+      const response = await fetch('http://localhost:8000/api/empresas/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          passwordConfirm,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('jwt', data.token);
+        // Redireciona para /meus_armazens apos criar conta
+        navigate('/meus_armazens');
+      } else {
+        // Exibe erro (caso o backend tenha retornado um erro)
+        alert(data.message || 'Erro ao criar a conta. Tente novamente.');
+      }
+    } catch (error) {
+      console.error('Erro ao criar a conta:', error);
+      alert('Erro ao se conectar com o servidor.');
     }
   };
 

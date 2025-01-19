@@ -1,15 +1,41 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: fazer autenticação
-    console.log('Email:', email);
-    console.log('Password:', password);
+    try {
+      // TODO: usar proxy
+      const response = await fetch('http://localhost:8000/api/empresas/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('jwt', data.token);
+        // Redireciona para /meus_armazens apos entrar conta
+        navigate('/meus_armazens');
+      } else {
+        // Exibe erro (caso o backend tenha retornado um erro)
+        alert(data.message || 'Erro ao entrar a conta. Tente novamente.');
+      }
+    } catch (error) {
+      console.error('Erro ao entrar a conta:', error);
+      alert('Erro ao se conectar com o servidor.');
+    }
   };
 
   return (

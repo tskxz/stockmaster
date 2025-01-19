@@ -8,6 +8,8 @@ import {createBrowserRouter, createRoutesFromElements, Route, RouterProvider} fr
 import LoginScreen from './Screens/LoginScreen';
 import SignupScreen from './Screens/SignupScreen';
 import HomeScreen from './Screens/HomeScreen';
+import MeusArmazens from './Screens/MeusArmazensScreen';
+import PrivateRoute from './components/PrivateRoute';
 
 
 const router = createBrowserRouter(
@@ -16,6 +18,11 @@ const router = createBrowserRouter(
       <Route index={true} path="/" element={<HomeScreen/>}/>
       <Route path="/login" element={<LoginScreen/>}/>
       <Route path="/signup" element={<SignupScreen/>}/>
+      
+        {/* Rota privada */}
+        <Route element={<PrivateRoute />}>
+          <Route path="/meus_armazens" element={<MeusArmazens />} />
+        </Route>
     </Route>
   )
 )
