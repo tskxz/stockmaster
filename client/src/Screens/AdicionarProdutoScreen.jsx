@@ -26,7 +26,7 @@ const AdicionarProdutoScreen = () => {
       setLoading(true);
       const token = localStorage.getItem('jwt');
       const response = await axios.post(
-        `/api/empresas/criar_produto`,
+        `http://localhost:8000/api/empresas/criar_produto`,
         { nome, descricao, preco, stock_total: stockTotal, stock_minimo: stockMinimo, armazemId },
         {
           headers: {

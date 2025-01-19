@@ -14,7 +14,7 @@ const ProdutosScreen = () => {
     const fetchProdutos = async () => {
       try {
         const token = localStorage.getItem('jwt');
-        const response = await axios.get(`/api/empresas/produtos/${armazemId}`, {
+        const response = await axios.get(`http://localhost:8000/api/empresas/produtos/${armazemId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

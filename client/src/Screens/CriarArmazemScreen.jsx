@@ -24,7 +24,7 @@ const CriarArmazemScreen = () => {
       setLoading(true);
       const token = localStorage.getItem('jwt');
       const response = await axios.post(
-        '/api/empresas/criar_armazem',
+        'http://localhost:8000/api/empresas/criar_armazem',
         { nome, endereco, capacidade },  // Envia os campos corretos
         {
           headers: {
