@@ -2,11 +2,26 @@ const express = require("express");
 const Empresa = require("../models/Empresa");
 const empresaController = require("../controllers/empresaController");
 const authController = require("../controllers/authController");
+const armazemController = require("../controllers/armazemController");
 
 const router = express.Router();
 
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
+router.get("/minha_empresa", authController.protect, empresaController.minha_empresa);
+
+router.post(
+  "/criar_armazem",
+  authController.protect, // Garante que a empresa está autenticada
+  armazemController.criarArmazem
+);
+
+router.get(
+  "/meus_armazens",
+  authController.protect,
+  armazemController.getArmazensPorEmpresaAutenticada
+);
+
 
 router.use(authController.protect, authController.restrictTo("admin"));
 

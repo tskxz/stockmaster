@@ -120,10 +120,37 @@ const deleteEmpresa = async function (req, res) {
   }
 };
 
+const minha_empresa = async function (req, res) {
+  try {
+    const empresa = await Empresa.findById(req.empresa._id);
+
+    if (!empresa) {
+      return res.status(404).json({
+        status: "error",
+        message: "Empresa not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        empresa,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      status: "error",
+      message: err,
+    });
+  }
+};
+
 module.exports = {
   getAllEmpresas,
   getEmpresa,
   createEmpresa,
   updateEmpresa,
   deleteEmpresa,
+  minha_empresa,
 };

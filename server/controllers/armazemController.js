@@ -1,0 +1,52 @@
+const Empresa = require("../models/Empresa");
+const Armazem = require("../models/Armazem");
+const criarArmazem = async function criarArmazem(req, res) {
+    try {
+      // Obter o ID da empresa autenticada
+      const empresaId = req.empresa._id;
+  
+      // Criar um novo armazém vinculado à empresa autenticada
+      const novoArmazem = await Armazem.create({
+        nome: req.body.nomeArmazem,
+        empresa: empresaId,
+      });
+  
+      res.status(201).json({
+        status: "success",
+        data: {
+          armazem: novoArmazem,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: "error",
+        message: error.message,
+      });
+    }
+  };
+
+const getArmazensPorEmpresaAutenticada = async function (req, res) {
+    try {
+      // Obter todos os armazéns associados à empresa autenticada
+      const armazens = await Armazem.find({ empresa: req.empresa._id });
+  
+      res.status(200).json({
+        status: "success",
+        results: armazens.length,
+        data: {
+          armazens,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: "error",
+        message: error.message,
+      });
+    }
+  };
+  
+
+module.exports = {
+  criarArmazem,
+  getArmazensPorEmpresaAutenticada,
+};
