@@ -1,7 +1,7 @@
 
 # **API de Empresas, Armazéns e Produtos**
 
-## **1. Autenticação e Cadastro**
+## **1. Autenticação**
 
 ### **POST /api/empresas/signup**
 Cria uma nova empresa e retorna um token de autenticação.
