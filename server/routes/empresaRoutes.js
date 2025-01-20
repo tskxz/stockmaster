@@ -41,6 +41,12 @@ router.get(
   produtoController.getProduto
 );
 
+router.get(
+  "/armazem/:armazemId",
+  authController.protect,
+  armazemController.getArmazem
+);
+
 router.put(
   "/editar_produto/:produtoId",
   authController.protect,

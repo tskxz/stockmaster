@@ -46,9 +46,37 @@ const getArmazensPorEmpresaAutenticada = async function (req, res) {
       });
     }
   };
+
+  const getArmazem = async function (req, res) {
+    try {
+      const { armazemId } = req.params;
   
+      // Busca o armazem pelo ID
+      const armazem = await Armazem.findById(armazemId);
+  
+      if (!armazem) {
+        return res.status(404).json({
+          status: "error",
+          message: "Armazem não encontrado.",
+        });
+      }
+      
+      res.status(200).json({
+        status: "success",
+        data: {
+          armazem,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        status: "error",
+        message: error.message,
+      });
+    }
+};
 
 module.exports = {
   criarArmazem,
   getArmazensPorEmpresaAutenticada,
+  getArmazem,
 };
