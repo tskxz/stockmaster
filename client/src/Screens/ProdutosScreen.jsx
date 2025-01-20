@@ -61,6 +61,12 @@ const ProdutosScreen = () => {
                   <p>{produto.descricao}</p>
                   <p>Preço: {produto.preco}€</p>
                   <p>Estoque: {produto.stock_total}</p>
+                  <Button
+    variant="warning"
+    onClick={() => navigate(`/editar_produto/${produto._id}`)}
+  >
+    Editar
+  </Button>
                 </ListGroup.Item>
               ))}
             </ListGroup>

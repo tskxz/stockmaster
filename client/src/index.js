@@ -13,6 +13,7 @@ import PrivateRoute from './components/PrivateRoute';
 import ProdutosScreen from './Screens/ProdutosScreen';
 import CriarArmazemScreen from './Screens/CriarArmazemScreen';
 import AdicionarProdutoScreen from './Screens/AdicionarProdutoScreen';
+import EditarProdutoScreen from './Screens/EditarProdutoScreen';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,8 +28,7 @@ const router = createBrowserRouter(
           <Route path="/produtos/:armazemId" element={<ProdutosScreen />} />
           <Route path="/criararmazem" element={<CriarArmazemScreen />} />
           <Route path="/adicionar_produto/:armazemId" element={<AdicionarProdutoScreen />} />
-
-
+          <Route path="/editar_produto/:produtoId" element={<EditarProdutoScreen />} />
         </Route>
     </Route>
   )
