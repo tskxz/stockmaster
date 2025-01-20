@@ -61,6 +61,13 @@ const MeusArmazensScreen = () => {
                   <strong>{armazem.nome}</strong>
                   <p>{armazem.endereco}</p>
                   <p>Capacidade: {armazem.capacidade}</p>
+                  <Button
+    variant="warning"
+    onClick={() => navigate(`/editar_armazem/${armazem._id}`)}
+    className="me-2"
+  >
+    Editar
+  </Button>
                   {/* Link para a página de produtos do armazém */}
                   <Link to={`/produtos/${armazem._id}`} className="btn btn-link">
                     Ver Produtos
