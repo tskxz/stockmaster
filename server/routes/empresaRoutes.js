@@ -41,6 +41,12 @@ router.get(
   produtoController.getProduto
 );
 
+router.put(
+  "/editar_produto/:produtoId",
+  authController.protect,
+  produtoController.editarProduto
+)
+
 
 router.use(authController.protect, authController.restrictTo("admin"));
 

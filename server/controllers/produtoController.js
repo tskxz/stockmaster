@@ -106,9 +106,55 @@ const getProduto = async function (req, res) {
     }
 };
 
+const editarProduto = async function (req, res) {
+  try {
+    const { produtoId } = req.params;
+    const { nome, descricao, preco, stock_total, stock_minimo } = req.body;
+
+    // Busca o produto pelo ID
+    const produto = await Produto.findById(produtoId);
+
+    if (!produto) {
+      return res.status(404).json({
+        status: "error",
+        message: "Produto não encontrado.",
+      });
+    }
+
+    // Verifica se o produto pertence à empresa autenticada
+    if (produto.empresa.toString() !== req.empresa._id.toString()) {
+      return res.status(403).json({
+        status: "error",
+        message: "Você não tem permissão para editar este produto.",
+      });
+    }
+
+    // Atualiza o produto
+    produto.nome = nome || produto.nome;
+    produto.descricao = descricao || produto.descricao;
+    produto.preco = preco || produto.preco;
+    produto.stock_total = stock_total || produto.stock_total;
+    produto.stock_minimo = stock_minimo || produto.stock_minimo;
+
+    const produtoAtualizado = await produto.save();
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        produto: produtoAtualizado,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
 
 module.exports = {
   criarProduto,
   getProdutosByArmazem,
   getProduto,
+  editarProduto,
 };
