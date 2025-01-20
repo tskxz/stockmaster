@@ -6,6 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 const ProdutosScreen = () => {
   const { armazemId } = useParams(); // Obter o ID do armazém da URL
   const [produtos, setProdutos] = useState([]);
+  const [armazemNome, setArmazemNome] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -20,8 +21,17 @@ const ProdutosScreen = () => {
           },
         });
 
+        const armazemResponse = await axios.get(`http://localhost:8000/api/empresas/armazem/${armazemId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         setProdutos(response.data.data.produtos);
+        setArmazemNome(armazemResponse.data.data.armazem.nome);
         setLoading(false);
+
+        
       } catch (err) {
         setError('Erro ao carregar os produtos');
         setLoading(false);
@@ -43,7 +53,7 @@ const ProdutosScreen = () => {
     <Container>
       <Row className="mb-4">
         <Col>
-          <h2>Produtos do Armazém</h2>
+        <h2>Produtos do Armazém "{armazemNome}"</h2>
           <Button variant="primary" onClick={() => navigate(`/adicionar_produto/${armazemId}`)}>
             Adicionar Produto
           </Button>
