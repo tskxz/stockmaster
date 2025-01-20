@@ -60,7 +60,7 @@ const getArmazensPorEmpresaAutenticada = async function (req, res) {
           message: "Armazem não encontrado.",
         });
       }
-      
+
       res.status(200).json({
         status: "success",
         data: {
@@ -75,8 +75,45 @@ const getArmazensPorEmpresaAutenticada = async function (req, res) {
     }
 };
 
+const editarArmazem = async function (req, res) {
+  try {
+    const { armazemId } = req.params;
+
+    // Busca o armazém pelo ID
+    const armazem = await Armazem.findById(armazemId);
+
+    if (!armazem) {
+      return res.status(404).json({
+        status: "error",
+        message: "Armazém não encontrado.",
+      });
+    }
+
+    // Atualiza os campos do armazém
+    armazem.nome = req.body.nome || armazem.nome;
+    armazem.endereco = req.body.endereco || armazem.endereco;
+    armazem.capacidade = req.body.capacidade || armazem.capacidade;
+
+    // Salva as alterações
+    const armazemAtualizado = await armazem.save();
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        armazem: armazemAtualizado,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   criarArmazem,
   getArmazensPorEmpresaAutenticada,
   getArmazem,
+  editarArmazem,
 };

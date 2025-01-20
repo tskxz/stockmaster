@@ -53,6 +53,9 @@ router.put(
   produtoController.editarProduto
 )
 
+router.put('/editar_armazem/:armazemId', authController.protect, armazemController.editarArmazem);
+
+
 
 router.use(authController.protect, authController.restrictTo("admin"));
 
