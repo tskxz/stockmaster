@@ -1,0 +1,51 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+main {
+  flex: 1;
+}
+
+footer {
+  margin-top: auto; /* Garante que o footer ficará no fundo */
+  text-align: center; /* Centraliza o texto no footer */
+  padding: 10px 0; /* Espaçamento dentro do footer */
+}
+
+.App-header {
+  background-color: #282c34;
+  padding: 20px 0;
+  color: white;
+  font-size: 2rem; /* Ajuste no tamanho da fonte */
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
