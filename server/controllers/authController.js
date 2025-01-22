@@ -33,16 +33,29 @@ const createSendToken = (empresa, statusCode, res) => {
 };
 
 exports.signup = async (req, res, next) => {
-  const newEmpresa = await Empresa.create({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm,
-    passwordChangedAt: req.body.passwordChangedAt,
-    role: req.body.role,
-  });
-  createSendToken(newEmpresa, 200, res);
+  try {
+    const newEmpresa = await Empresa.create({
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+      passwordConfirm: req.body.passwordConfirm,
+      passwordChangedAt: req.body.passwordChangedAt,
+      role: req.body.role,
+    });
+    createSendToken(newEmpresa, 200, res);
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      const messages = Object.values(error.errors).map((err) => err.message);
+      return res.status(400).json({
+        status: "fail",
+        message: messages.join(", "),
+      });
+    }
+    // Passa outros erros para o middleware de erro global
+    next(error);
+  }
 };
+
 
 exports.login = async (req, res, next) => {
   const { email, password } = req.body;

@@ -48,14 +48,33 @@ const getEmpresa = async function (req, res) {
   }
 };
 
-const createEmpresa = async function (req, res) {
+const createEmpresa = async (req, res) => {
   try {
+    const { name, email, password, passwordConfirm } = req.body;
+
+    // Validação inicial no controlador (antes do Mongoose)
+    if (!password || password.length < 8) {
+      return res.status(400).json({
+        status: "error",
+        message: "A senha deve ter pelo menos 8 caracteres.",
+      });
+    }
+
+    if (password !== passwordConfirm) {
+      return res.status(400).json({
+        status: "error",
+        message: "As senhas não coincidem.",
+      });
+    }
+
+    // Criação no banco de dados
     const newEmpresa = await Empresa.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      passwordConfirm: req.body.passwordConfirm,
+      name,
+      email,
+      password,
+      passwordConfirm,
     });
+
     res.status(201).json({
       status: "success",
       data: {
@@ -63,12 +82,28 @@ const createEmpresa = async function (req, res) {
       },
     });
   } catch (err) {
+    if (err.name === "ValidationError") {
+      // Captura erros de validação do Mongoose
+      const errorMessages = Object.values(err.errors).map((e) => e.message);
+      return res.status(400).json({
+        status: "error",
+        message: errorMessages.join(" "),
+      });
+    }
+
+    // Log para monitoramento e resposta genérica
+    console.error("Erro no servidor:", err);
     res.status(500).json({
       status: "error",
-      message: err,
+      message: "Ocorreu um erro no servidor. Tente novamente mais tarde.",
     });
   }
 };
+
+
+
+
+
 
 const updateEmpresa = async function (req, res) {
   try {

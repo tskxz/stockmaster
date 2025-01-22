@@ -4,15 +4,20 @@ const empresaSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true, lowercase: true },
   role: { type: String, enum: ["empresa", "admin"], default: "empresa" },
-  password: { type: String, required: true, minLength: 8, select: false },
+  password: { 
+    type: String, 
+    required: [true, "A senha é obrigatória."], 
+    minLength: [8, "A senha deve ter pelo menos 8 caracteres."], 
+    select: false 
+  },
   passwordConfirm: {
     type: String,
-    required: true,
+    required: [true, "É necessário confirmar a senha."],
     validate: {
       validator: function (value) {
         return value === this.password;
       },
-      message: "Passwords do not match",
+      message: "As senhas não coincidem.",
     },
     select: false,
   },
