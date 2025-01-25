@@ -1,0 +1,66 @@
+html {
+        border: 5px solid #041840;
+        height: 100%;
+        box-sizing: border-box;
+        background-color: #f0f1f2;
+}
+
+.app {
+        display: flex;
+        flex-direction: row;
+        gap: 40%;
+}
+
+.app-leftside {
+        display: flex;
+        flex-direction: column;
+        justify-content: left;
+        align-items: left;
+}
+
+.app-leftside h1 {
+        font-size: 5rem;
+        color: #1a6dd9;
+}
+
+.app-rightside img {
+        size: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: left;
+        margin-top: 10px;
+        margin-left: -300px;
+}
+
+.app-description {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: left;
+        width: 500px;
+        gap: 5px;
+}
+
+li {
+        list-style: none;
+}
+
+.button {
+        background-color: #1a6dd9;
+        color: white;
+        border: 1px solid;
+        border-radius: 50px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all ease-out 0.3s;
+        text-decoration: none;
+        width: 100%;
+        align-items: left;
+        justify-content: left;
+}
+
+.button:hover {
+        background-color: #041840;
+}
