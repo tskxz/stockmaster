@@ -25,7 +25,8 @@ const Header = () => {
                                                 <img
                                                         src={logo}
                                                         alt="StockMaster"
-                                                        width="105"
+                                                        width="150px"
+                                                        height="150px"
                                                 />
                                         </Navbar.Brand>
                                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -35,11 +36,24 @@ const Header = () => {
                                                         {!token ? (
                                                                 <Nav.Link href="/login">
                                                                         <FaUser
+                                                                                className="icon-login"
                                                                                 style={{
-                                                                                        color: "#1a6dd9",
+                                                                                        color: "#52887F",
                                                                                         height: "25px",
                                                                                         width: "25px",
                                                                                 }}
+                                                                                onMouseEnter={(
+                                                                                        e,
+                                                                                ) =>
+                                                                                        (e.currentTarget.style.color =
+                                                                                                "#69c18a")
+                                                                                }
+                                                                                onMouseLeave={(
+                                                                                        e,
+                                                                                ) =>
+                                                                                        (e.currentTarget.style.color =
+                                                                                                "#52887F")
+                                                                                }
                                                                         />{" "}
                                                                 </Nav.Link>
                                                         ) : (
