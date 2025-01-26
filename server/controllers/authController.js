@@ -34,6 +34,14 @@ const createSendToken = (empresa, statusCode, res) => {
 
 exports.signup = async (req, res, next) => {
   try {
+    const existingUser = await Empresa.findOne({email: req.body.email})
+    console.log(existingUser)
+    if(existingUser){
+      return res.status(400).json({
+        status: "fail",
+        message: "Esse email já existe!"
+      })
+    }
     const newEmpresa = await Empresa.create({
       name: req.body.name,
       email: req.body.email,
