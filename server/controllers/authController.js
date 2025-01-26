@@ -34,6 +34,14 @@ const createSendToken = (empresa, statusCode, res) => {
 
 exports.signup = async (req, res, next) => {
   try {
+    const existingUser = await Empresa.findOne({email: req.body.email})
+    console.log(existingUser)
+    if(existingUser){
+      return res.status(400).json({
+        status: "fail",
+        message: "Esse email já existe!"
+      })
+    }
     const newEmpresa = await Empresa.create({
       name: req.body.name,
       email: req.body.email,
@@ -64,7 +72,7 @@ exports.login = async (req, res, next) => {
   if (!email || !password) {
     return res.status(400).json({
       status: "error",
-      message: "Please provide a valid email and password",
+      message: "Introduza um email e palavra passe válido!",
     });
   }
   // check if empresa exists && password is correct
@@ -73,7 +81,7 @@ exports.login = async (req, res, next) => {
   if (!empresa || !(await empresa.correctPassword(password, empresa.password))) {
     return res.status(401).json({
       status: "error",
-      message: "Incorrect email or password",
+      message: "Email ou palavra passe errado!",
     });
   }
   // if all ok, send token to client
