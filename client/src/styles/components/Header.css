@@ -1,0 +1,12 @@
+.navbar {
+        position: fixed;
+}
+
+.icon-login {
+        transition: ease-in 0.3s;
+}
+
+.icon-login:hover {
+        transform: scale(1.5);
+        color: #69c18a;
+}
