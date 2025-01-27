@@ -95,7 +95,7 @@ const getProduto = async function (req, res) {
   
       // Busca o produto pelo ID
       const produto = await Produto.findById(produtoId).populate("armazem").populate("empresa");
-  
+      
       if (!produto) {
         return res.status(404).json({
           status: "error",
@@ -110,13 +110,25 @@ const getProduto = async function (req, res) {
           message: "Você não tem permissão para acessar este produto.",
         });
       }
-  
-      res.status(200).json({
-        status: "success",
-        data: {
-          produto,
-        },
-      });
+      
+      if(produto.stock_total <= produto.stock_minimo){
+        produto.status = "STOCK BAIXO"
+        const produtoAtualizado = await produto.save();
+        res.status(200).json({
+          status: "success",
+          data: {
+            produtoAtualizado,
+          },
+        });
+      } else {
+        res.status(200).json({
+          status: "success",
+          data: {
+            produto,
+          },
+        });
+      }
+
     } catch (error) {
       res.status(500).json({
         status: "error",
@@ -133,7 +145,7 @@ const editarProduto = async function (req, res) {
     // Busca o produto pelo ID
     const produto = await Produto.findById(produtoId).populate("armazem");
 
-    const produtos = await Produto.find({ armazem: armazemId });
+    const produtos = await Produto.find({ armazem: produto.armazem._id });
 
     if(stock_total > produto.armazem.capacidade || stock_minimo > produto.armazem.capacidade) {
       return res.status(400).json({
