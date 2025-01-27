@@ -24,6 +24,7 @@ const AdicionarProdutoScreen = () => {
 
     try {
       setLoading(true);
+      setError(null);
       const token = localStorage.getItem('jwt');
       const response = await axios.post(
         `http://localhost:8000/api/empresas/criar_produto`,
@@ -41,7 +42,11 @@ const AdicionarProdutoScreen = () => {
       }
     } catch (err) {
       setLoading(false);
-      setError('Erro ao adicionar o produto. Tente novamente.');
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('Ocorreu um erro inesperado.');
+      }
     }
   };
 

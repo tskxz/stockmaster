@@ -59,9 +59,14 @@ const EditarProdutoScreen = () => {
     const { produto } = response.data.data;
 
     // Redirecionar para o ID do armazém associado ao produto
-    navigate(`/produtos/${produto.armazem}`);
+    navigate(`/produtos/${produto.armazem._id}`);
     } catch (err) {
-      setError("Erro ao atualizar o produto. Tente novamente.");
+      
+      if (err.response && err.response.data && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('Ocorreu um erro inesperado.');
+      }
     }
   };
 
