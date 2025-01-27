@@ -19,10 +19,10 @@ const criarProduto = async function (req, res) {
     
     // Verifica se o novo stock total não excede a capacidade do armazém e não ultrapassa o stock mínimo
     const stock_total_atual = parseInt(totalStock, 10) + parseInt(stock_total, 10);
-    if(totalStock > armazem.capacidade || stock_total_atual > armazem.capacidade){
+    if (stock_total_atual > armazem.capacidade) {
       return res.status(400).json({
         status: "error",
-        message: "O stock total ultrapassou a capacidade do armazém.",
+        message: "Não é possível criar outro produto, pois a capacidade do armazém seria excedida.",
       });
     }
     
@@ -136,14 +136,19 @@ const editarProduto = async function (req, res) {
 
     const produtos = await Produto.find({ armazem: produto.armazem.id });
 
-    if(stock_total > produto.armazem.capacidade || stock_minimo > produto.armazem.capacidade) {
+    const totalStockAtualizado = produtos.reduce((total, p) => {
+      return p._id.toString() === produtoId
+        ? total + parseInt(stock_total || 0, 10)
+        : total + parseInt(p.stock_total, 10);
+    }, 0);
+    
+    if (totalStockAtualizado > produto.armazem.capacidade) {
       return res.status(400).json({
-          status: "error",
-          message: "O stock total e o stock mínimo não podem ultrapassar a capacidade do armazém.",
-        });
+        status: "error",
+        message: "Não é possível editar o produto, pois a capacidade do armazém seria excedida.",
+      });
     }
-
-    const totalStock = produtos.reduce((total, produto) => total + produto.stock_total, 0);
+    
   
     if (!produto) {
       return res.status(404).json({
