@@ -14,7 +14,29 @@ const criarProduto = async function (req, res) {
       });
     }
 
+    const produtos = await Produto.find({ armazem: armazemId });
+    const totalStock = produtos.reduce((total, produto) => total + produto.stock_total, 0);
+    
+    // Verifica se o novo stock total não excede a capacidade do armazém e não ultrapassa o stock mínimo
+    const stock_total_atual = parseInt(totalStock, 10) + parseInt(stock_total, 10);
+    console.log(stock_total_atual);
+    console.log(stock_total)
+    console.log(armazem.capacidade)
+    if(totalStock > armazem.capacidade || stock_total_atual > armazem.capacidade){
+      return res.status(400).json({
+        status: "error",
+        message: "O stock total ultrapassou a capacidade do armazém.",
+      });
+    }
+    
     // Cria o produto associado à empresa e ao armazém
+    if(stock_total > armazem.capacidade || stock_minimo > armazem.capacidade){
+      return res.status(400).json({
+        status: "error",
+        message: "O stock total e o stock mínimo não podem ultrapassar a capacidade do armazém.",
+      });
+    }
+
     const novoProduto = await Produto.create({
       nome,
       descricao,
@@ -112,8 +134,13 @@ const editarProduto = async function (req, res) {
     const { nome, descricao, preco, stock_total, stock_minimo } = req.body;
 
     // Busca o produto pelo ID
-    const produto = await Produto.findById(produtoId);
-
+    const produto = await Produto.findById(produtoId).populate("armazem");
+    if(stock_total > produto.armazem.capacidade || stock_minimo > produto.armazem.capacidade) {
+      return res.status(400).json({
+          status: "error",
+          message: "O stock total e o stock mínimo não podem ultrapassar a capacidade do armazém.",
+        });
+    }
     if (!produto) {
       return res.status(404).json({
         status: "error",
