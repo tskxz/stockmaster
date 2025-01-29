@@ -8,7 +8,8 @@ const produtoSchema = new mongoose.Schema({
   stock_minimo: { type: Number, default: 0 },
   empresa: { type: mongoose.Schema.Types.ObjectId, ref: "Empresa", required: true },
   armazem: { type: mongoose.Schema.Types.ObjectId, ref: "Armazem", required: true },
-  status: { type: String }
+  status: { type: String },
+  categoria: { type: mongoose.Schema.Types.ObjectId, ref: "Categoria" },
 });
 
 const Produto = mongoose.model("Produto", produtoSchema);

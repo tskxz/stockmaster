@@ -1,9 +1,11 @@
 const Produto = require("../models/Produto");
 const Armazem = require("../models/Armazem");
+const Categoria = require("../models/Categoria");
+
 
 const criarProduto = async function (req, res) {
   try {
-    const { nome, descricao, preco, stock_total, stock_minimo, armazemId } = req.body;
+    const { nome, descricao, preco, stock_total, stock_minimo, armazemId, categoriaId } = req.body;
 
     // Verifica se o armazém pertence à empresa autenticada
     const armazem = await Armazem.findOne({ _id: armazemId, empresa: req.empresa._id });
@@ -12,6 +14,18 @@ const criarProduto = async function (req, res) {
         status: "error",
         message: "O armazém não pertence à empresa autenticada ou não foi encontrado.",
       });
+    }
+
+    // Verifica se a categoria pertence à empresa
+    let categoria = null;
+    if (categoriaId) {
+      categoria = await Categoria.findOne({ _id: categoriaId, empresa: req.empresa._id });
+      if (!categoria) {
+        return res.status(403).json({
+          status: "error",
+          message: "A categoria não pertence à empresa autenticada ou não foi encontrada.",
+        });
+      }
     }
 
     const produtos = await Produto.find({ armazem: armazemId });
@@ -42,6 +56,7 @@ const criarProduto = async function (req, res) {
       stock_minimo,
       empresa: req.empresa._id,
       armazem: armazemId,
+      categoria: categoria ? categoria._id : null, // Associa a categoria ao produto
     });
 
     res.status(201).json({
@@ -94,7 +109,8 @@ const getProduto = async function (req, res) {
       const { produtoId } = req.params;
   
       // Busca o produto pelo ID
-      const produto = await Produto.findById(produtoId).populate("armazem").populate("empresa");
+      const produto = await Produto.findById(produtoId).populate("armazem").populate("empresa").populate("categoria"); 
+      
   
       if (!produto) {
         return res.status(404).json({
@@ -129,7 +145,7 @@ const getProduto = async function (req, res) {
 const editarProduto = async function (req, res) {
   try {
     const { produtoId } = req.params;
-    const { nome, descricao, preco, stock_total, stock_minimo } = req.body;
+    const { nome, descricao, preco, stock_total, stock_minimo, categoriaId } = req.body;
 
     // Busca o produto pelo ID
     const produto = await Produto.findById(produtoId).populate("armazem");
@@ -165,6 +181,18 @@ const editarProduto = async function (req, res) {
       });
     }
 
+    // Verifica se a categoria pertence à empresa
+    let categoria = null;
+    if (categoriaId) {
+      categoria = await Categoria.findOne({ _id: categoriaId, empresa: req.empresa._id });
+      if (!categoria) {
+        return res.status(403).json({
+          status: "error",
+          message: "A categoria não pertence à empresa autenticada ou não foi encontrada.",
+        });
+      }
+    }
+
     // Atualiza o produto
     produto.nome = nome || produto.nome;
     produto.descricao = descricao || produto.descricao;
@@ -176,6 +204,7 @@ const editarProduto = async function (req, res) {
     } else {
       produto.status = ""
     };
+    produto.categoria = categoria ? categoria._id : produto.categoria;
 
     const produtoAtualizado = await produto.save();
 
