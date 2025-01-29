@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/screens/homescreen.css";
-import homeimg from "../assets/homeimg.png";
+import homeimg from "../assets/homimage.png";
 
 const HomeScreen = () => {
         return (
