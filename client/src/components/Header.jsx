@@ -1,6 +1,7 @@
 import React from "react";
 import { Nav, Navbar, Container } from "react-bootstrap";
 import { FaUser } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/stockmaster.png";
 import "../styles/components/Header.css";
@@ -63,8 +64,26 @@ const Header = () => {
                                                                                 handleLogout
                                                                         }
                                                                 >
-                                                                        <FaUser />{" "}
-                                                                        Logout
+                                                                        <MdLogout
+                                                                                className="icon-login"
+                                                                                style={{
+                                                                                        color: "#52887F",
+                                                                                        height: "25px",
+                                                                                        width: "25px",
+                                                                                }}
+                                                                                onMouseEnter={(
+                                                                                        e,
+                                                                                ) =>
+                                                                                        (e.currentTarget.style.color =
+                                                                                                "#69c18a")
+                                                                                }
+                                                                                onMouseLeave={(
+                                                                                        e,
+                                                                                ) =>
+                                                                                        (e.currentTarget.style.color =
+                                                                                                "#52887F")
+                                                                                }
+                                                                        />{" "}
                                                                 </Nav.Link>
                                                         )}
                                                 </Nav>
