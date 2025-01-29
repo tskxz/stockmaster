@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -10,10 +10,28 @@ const AdicionarProdutoScreen = () => {
   const [preco, setPreco] = useState('');
   const [stockTotal, setStockTotal] = useState('');
   const [stockMinimo, setStockMinimo] = useState('');
+  const [categoriaId, setCategoriaId] = useState(""); // Estado para categoria
+  const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+// Buscar categorias ao carregar a página
+useEffect(() => {
+  const fetchCategorias = async () => {
+    try {
+      const token = localStorage.getItem("jwt");
+      const response = await axios.get("http://localhost:8000/api/categorias", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
+      setCategorias(response.data.data.categorias);
+    } catch (err) {
+      setError("Erro ao carregar categorias.");
+    }
+  };
+
+  fetchCategorias();
+}, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -28,7 +46,7 @@ const AdicionarProdutoScreen = () => {
       const token = localStorage.getItem('jwt');
       const response = await axios.post(
         `http://localhost:8000/api/empresas/criar_produto`,
-        { nome, descricao, preco, stock_total: stockTotal, stock_minimo: stockMinimo, armazemId },
+        { nome, descricao, preco, stock_total: stockTotal, stock_minimo: stockMinimo, armazemId, categoriaId },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -109,6 +127,19 @@ const AdicionarProdutoScreen = () => {
                   onChange={(e) => setStockMinimo(e.target.value)}
                   placeholder="Digite o estoque mínimo"
                 />
+              </Form.Group>
+
+              {/* Campo para escolher a categoria */}
+              <Form.Group controlId="categoria" className="mb-3">
+                <Form.Label>Categoria</Form.Label>
+                <Form.Control as="select" value={categoriaId} onChange={(e) => setCategoriaId(e.target.value)}>
+                  <option value="">Selecione uma categoria</option>
+                  {categorias.map((categoria) => (
+                    <option key={categoria._id} value={categoria._id}>
+                      {categoria.nome}
+                    </option>
+                  ))}
+                </Form.Control>
               </Form.Group>
 
               <Button type="submit" variant="primary" className="w-100" disabled={loading}>

@@ -73,7 +73,7 @@ const ProdutosScreen = () => {
                   <p>{produto.descricao}</p>
                   <p>Preço: {produto.preco}€</p>
                   <p>Estoque: {produto.stock_total}</p>
-                  <p>Categoria: {produto.categoria.nome}</p>
+                  <p>Categoria: {produto.categoria ? produto.categoria.nome : ""}</p>
                   <p>{produto.status}</p>
                   <Button
     variant="warning"
