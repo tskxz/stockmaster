@@ -12,6 +12,8 @@ const EditarProdutoScreen = () => {
   const [preco, setPreco] = useState("");
   const [stockTotal, setStockTotal] = useState("");
   const [stockMinimo, setStockMinimo] = useState("");
+  const [categoriaId, setCategoriaId] = useState("");
+  const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -31,6 +33,15 @@ const EditarProdutoScreen = () => {
         setPreco(produto.preco);
         setStockTotal(produto.stock_total);
         setStockMinimo(produto.stock_minimo);
+        setCategoriaId(produto.categoria?._id || "");
+
+        // Buscar as categorias disponíveis
+        const responseCategorias = await axios.get("http://localhost:8000/api/categorias", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        setCategorias(responseCategorias.data.data.categorias);
+
         setLoading(false);
       } catch (err) {
         setLoading(false);
@@ -52,7 +63,7 @@ const EditarProdutoScreen = () => {
       const token = localStorage.getItem("jwt");
     const response = await axios.put(
       `http://localhost:8000/api/empresas/editar_produto/${produtoId}`,
-      { nome, descricao, preco, stock_total: stockTotal, stock_minimo: stockMinimo },
+      { nome, descricao, preco, stock_total: stockTotal, stock_minimo: stockMinimo, categoriaId },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -134,6 +145,19 @@ const EditarProdutoScreen = () => {
                 value={stockMinimo}
                 onChange={(e) => setStockMinimo(e.target.value)}
               />
+            </Form.Group>
+
+             {/* Campo para escolher a categoria */}
+             <Form.Group controlId="categoria" className="mb-3">
+              <Form.Label>Categoria</Form.Label>
+              <Form.Control as="select" value={categoriaId} onChange={(e) => setCategoriaId(e.target.value)}>
+                <option value="">Selecione uma categoria</option>
+                {categorias.map((categoria) => (
+                  <option key={categoria._id} value={categoria._id}>
+                    {categoria.nome}
+                  </option>
+                ))}
+              </Form.Control>
             </Form.Group>
 
             <Button type="submit" variant="primary" className="w-100">

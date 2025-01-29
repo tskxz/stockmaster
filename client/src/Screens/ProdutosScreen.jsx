@@ -31,12 +31,14 @@ const ProdutosScreen = () => {
         setArmazemNome(armazemResponse.data.data.armazem.nome);
         setLoading(false);
 
+        console.log(response.data.data.produtos)
         
       } catch (err) {
         setError('Erro ao carregar os produtos');
         setLoading(false);
       }
     };
+    
 
     fetchProdutos();
   }, [armazemId]);
@@ -71,6 +73,7 @@ const ProdutosScreen = () => {
                   <p>{produto.descricao}</p>
                   <p>Preço: {produto.preco}€</p>
                   <p>Estoque: {produto.stock_total}</p>
+                  <p>Categoria: {produto.categoria.nome}</p>
                   <p>{produto.status}</p>
                   <Button
     variant="warning"

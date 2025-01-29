@@ -87,7 +87,7 @@ const getProdutosByArmazem = async function (req, res) {
     }
 
     // Busca os produtos do armazém
-    const produtos = await Produto.find({ armazem: armazemId });
+    const produtos = await Produto.find({ armazem: armazemId }).populate("categoria");
 
     res.status(200).json({
       status: "success",
