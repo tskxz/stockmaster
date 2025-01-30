@@ -74,7 +74,7 @@ const EditarProdutoScreen = () => {
     const { produto } = response.data.data;
 
     // Redirecionar para o ID do armazém associado ao produto
-    navigate(`/produtos/${produto.armazem._id}`);
+    navigate(`/produtos/${produto.armazem}`);
     } catch (err) {
       
       if (err.response && err.response.data && err.response.data.message) {
