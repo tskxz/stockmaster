@@ -1,182 +1,99 @@
-const Empresa = require("../models/Empresa");
+const empresaService = require('../services/EmpresaService');
 
 // Get All Empresas
 const getAllEmpresas = async function (req, res) {
   try {
-    const empresas = await Empresa.find();
+    const empresas = await empresaService.getAll();
     res.status(200).json({
       status: "success",
       results: empresas.length,
-      data: {
-        empresas,
-      },
+      data: { empresas },
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({
       status: "error",
-      message: err,
+      message: err.message,
     });
-    return;
   }
 };
 
 const getEmpresa = async function (req, res) {
   try {
-    const empresa = await Empresa.findById(req.params.id);
-
-    if (!empresa) {
-      return res.status(404).json({
-        status: "error",
-        message: "Empresa not found",
-      });
-    }
-
+    const empresa = await empresaService.getEmpresa(req.params.id);
     res.status(200).json({
       status: "success",
-      data: {
-        empresa,
-      },
+      data: { empresa },
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({
+    res.status(404).json({
       status: "error",
-      message: err,
+      message: err.message,
     });
-    return;
   }
 };
 
 const createEmpresa = async (req, res) => {
   try {
-    const { name, email, password, passwordConfirm } = req.body;
-
-    // Validação inicial no controlador (antes do Mongoose)
-    if (!password || password.length < 8) {
-      return res.status(400).json({
-        status: "error",
-        message: "A senha deve ter pelo menos 8 caracteres.",
-      });
-    }
-
-    if (password !== passwordConfirm) {
-      return res.status(400).json({
-        status: "error",
-        message: "As senhas não coincidem.",
-      });
-    }
-
-    // Criação na base de dados
-    const newEmpresa = await Empresa.create({
-      name,
-      email,
-      password,
-      passwordConfirm,
-    });
-
+    const newEmpresa = await empresaService.createEmpresa(req.body);
     res.status(201).json({
       status: "success",
-      data: {
-        empresa: newEmpresa,
-      },
+      data: { empresa: newEmpresa },
     });
   } catch (err) {
-    if (err.name === "ValidationError") {
-      // Captura erros de validação do Mongoose
-      const errorMessages = Object.values(err.errors).map((e) => e.message);
-      return res.status(400).json({
-        status: "error",
-        message: errorMessages.join(" "),
-      });
-    }
-
-    // Log para monitoramento e resposta genérica
-    console.error("Erro no servidor:", err);
-    res.status(500).json({
+    console.error(err);
+    res.status(400).json({
       status: "error",
-      message: "Ocorreu um erro no servidor. Tente novamente mais tarde.",
+      message: err.message,
     });
   }
 };
 
-
-
-
-
-
 const updateEmpresa = async function (req, res) {
   try {
-    const updatedEmpresa = await Empresa.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    if (!updatedEmpresa) {
-      return res.status(404).json({
-        status: "error",
-        message: "Empresa not found",
-      });
-    }
+    const updatedEmpresa = await empresaService.updateEmpresa(req.params.id, req.body);
     res.status(200).json({
       status: "success",
-      data: {
-        empresa: updatedEmpresa,
-      },
+      data: { empresa: updatedEmpresa },
     });
   } catch (err) {
-    res.status(500).json({
+    console.error(err);
+    res.status(400).json({
       status: "error",
-      message: err,
+      message: err.message,
     });
   }
 };
 
 const deleteEmpresa = async function (req, res) {
   try {
-    const deletedEmpresa = await Empresa.findByIdAndDelete(req.params.id);
-    if (!deletedEmpresa) {
-      return res.status(404).json({
-        status: "error",
-        message: "Empresa not found",
-      });
-    } else {
-      res.status(204).json({
-        status: "success",
-        message: "Empresa deleted successfully",
-      });
-    }
+    await empresaService.deleteEmpresa(req.params.id);
+    res.status(204).json({
+      status: "success",
+      message: "Empresa deletada com sucesso",
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({
       status: "error",
-      message: err,
+      message: err.message,
     });
-    return;
   }
 };
 
 const minha_empresa = async function (req, res) {
   try {
-    const empresa = await Empresa.findById(req.empresa._id);
-
-    if (!empresa) {
-      return res.status(404).json({
-        status: "error",
-        message: "Empresa not found",
-      });
-    }
-
+    const empresa = await empresaService.getEmpresa(req.empresa._id);
     res.status(200).json({
       status: "success",
-      data: {
-        empresa,
-      },
+      data: { empresa },
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({
+    res.status(404).json({
       status: "error",
-      message: err,
+      message: err.message,
     });
   }
 };
