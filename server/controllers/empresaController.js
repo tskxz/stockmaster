@@ -67,7 +67,7 @@ const createEmpresa = async (req, res) => {
       });
     }
 
-    // Criação no banco de dados
+    // Criação na base de dados
     const newEmpresa = await Empresa.create({
       name,
       email,
