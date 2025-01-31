@@ -72,7 +72,7 @@ const MeusArmazensScreen = () => {
                                                                 cadastrados.
                                                         </Alert>
                                                 ) : (
-                                                        <ListGroup>
+                                                        <ListGroup className="container-armazens">
                                                                 {armazens.map(
                                                                         (
                                                                                 armazem,
@@ -83,41 +83,43 @@ const MeusArmazensScreen = () => {
                                                                                                 armazem._id
                                                                                         }
                                                                                 >
-                                                                                        <strong>
+                                                                                        <h1 className="nome-armazem">
                                                                                                 {
                                                                                                         armazem.nome
                                                                                                 }
-                                                                                        </strong>
-                                                                                        <p>
+                                                                                        </h1>
+                                                                                        <p className="morada-armazem">
                                                                                                 {
                                                                                                         armazem.endereco
                                                                                                 }
                                                                                         </p>
-                                                                                        <p>
+                                                                                        <p className="capacidade-armazem">
                                                                                                 Capacidade:{" "}
                                                                                                 {
                                                                                                         armazem.capacidade
                                                                                                 }
                                                                                         </p>
-                                                                                        <Button
-                                                                                                variant="warning"
-                                                                                                onClick={() =>
-                                                                                                        navigate(
-                                                                                                                `/editar_armazem/${armazem._id}`,
-                                                                                                        )
-                                                                                                }
-                                                                                                className="me-2"
-                                                                                        >
-                                                                                                Editar
-                                                                                        </Button>
-                                                                                        {/* Link para a página de produtos do armazém */}
-                                                                                        <Link
-                                                                                                to={`/produtos/${armazem._id}`}
-                                                                                                className="btn btn-link"
-                                                                                        >
-                                                                                                Ver
-                                                                                                Produtos
-                                                                                        </Link>
+                                                                                        <div className="ver-editar">
+                                                                                                <Button
+                                                                                                        variant="warning"
+                                                                                                        onClick={() =>
+                                                                                                                navigate(
+                                                                                                                        `/editar_armazem/${armazem._id}`,
+                                                                                                                )
+                                                                                                        }
+                                                                                                        className="editar-armazem"
+                                                                                                >
+                                                                                                        Editar
+                                                                                                </Button>
+                                                                                                {/* Link para a página de produtos do armazém */}
+                                                                                                <Link
+                                                                                                        to={`/produtos/${armazem._id}`}
+                                                                                                        className="ver-produtos"
+                                                                                                >
+                                                                                                        Ver
+                                                                                                        Produtos
+                                                                                                </Link>
+                                                                                        </div>
                                                                                 </ListGroup.Item>
                                                                         ),
                                                                 )}

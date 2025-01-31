@@ -33,12 +33,13 @@
 }
 
 .app-rightside img {
-        width: 55%;
+        width: 90%;
         height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-right: -50%;
+        margin-top: -5%;
+        margin-right: -15%;
 }
 
 .app-description {
