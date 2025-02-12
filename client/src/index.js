@@ -16,6 +16,7 @@ import AdicionarProdutoScreen from './Screens/AdicionarProdutoScreen';
 import EditarProdutoScreen from './Screens/EditarProdutoScreen';
 import EditarArmazemScreen from './Screens/EditarArmazemScreen';
 import CriarCategoriaScreen from './Screens/CriarCategoriaScreen';
+import RelatorioInventarioScreen from './Screens/RelatorioInventarioScreen'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -33,7 +34,7 @@ const router = createBrowserRouter(
           <Route path="/editar_produto/:produtoId" element={<EditarProdutoScreen />} />
           <Route path="/editar_armazem/:armazemId" element={<EditarArmazemScreen />} />
           <Route path="/criar-categoria" element={<CriarCategoriaScreen />} />
-
+          <Route path="/relatorio-inventario" element={<RelatorioInventarioScreen />} />
         </Route>
     </Route>
   )
