@@ -4,6 +4,8 @@ const empresaController = require("../controllers/empresaController");
 const authController = require("../controllers/authController");
 const armazemController = require("../controllers/armazemController");
 const produtoController = require("../controllers/produtoController");
+const movimentacaoController = require("../controllers/MovimentacaoController");
+
 
 const router = express.Router();
 
@@ -55,6 +57,17 @@ router.put(
 
 router.put('/editar_armazem/:armazemId', authController.protect, armazemController.editarArmazem);
 
+router.post(
+  "/movimentacao",
+  authController.protect,
+  movimentacaoController.criarMovimentacao
+);
+
+router.get(
+  "/movimentacoes",
+  authController.protect,
+  movimentacaoController.getMovimentacoes
+);
 
 
 router.use(authController.protect, authController.restrictTo("admin"));
