@@ -49,14 +49,17 @@ h2 {
 }
 
 .lista-armazens {
+        margin: 10px 0;
+        box-sizing: border-box;
+}
+
+.lista-armazens {
         background-color: #e8ebf8;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
         justify-content: center;
-        border:
-                3px,
-                solid #69c18a;
+        border: 3px solid #69c18a;
         box-sizing: border-box;
         border-radius: 10px;
 }
