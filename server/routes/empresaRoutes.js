@@ -4,8 +4,8 @@ const empresaController = require("../controllers/empresaController");
 const authController = require("../controllers/authController");
 const armazemController = require("../controllers/armazemController");
 const produtoController = require("../controllers/produtoController");
-const movimentacaoController = require("../controllers/MovimentacaoController");
-const relatorioController = require("../controllers/RelatorioController");
+const movimentacaoController = require("../controllers/movimentacaoController");
+const relatorioController = require("../controllers/relatorioController");
 
 const router = express.Router();
 
