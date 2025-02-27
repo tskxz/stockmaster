@@ -36,7 +36,7 @@ const router = createBrowserRouter(
           <Route path="/editar_armazem/:armazemId" element={<EditarArmazemScreen />} />
           <Route path="/criar-categoria" element={<CriarCategoriaScreen />} />
           <Route path="/relatorio-inventario" element={<RelatorioInventarioScreen />} />
-          <Route path="/empresaimagem" element={<EmpresaImagemScreen/>} />
+          <Route path="/perfil" element={<EmpresaImagemScreen/>} />
         </Route>
     </Route>
   )

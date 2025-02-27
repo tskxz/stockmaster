@@ -82,7 +82,7 @@ const EmpresaImagemScreen = () => {
 
   return (
     <Container className="mt-4">
-      <h2>Imagem da Empresa</h2>
+      <h2>Perfil da empresa</h2>
       
       {mensagem && <Alert variant="info">{mensagem}</Alert>}
 
