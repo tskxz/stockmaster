@@ -1,4 +1,5 @@
 const express = require("express");
+const multer = require("multer");
 const Empresa = require("../models/Empresa");
 const empresaController = require("../controllers/empresaController");
 const authController = require("../controllers/authController");
@@ -8,6 +9,18 @@ const movimentacaoController = require("../controllers/movimentacaoController");
 const relatorioController = require("../controllers/relatorioController");
 
 const router = express.Router();
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Pasta para as imagens
+  },
+  filename: (req, file, cb) => {
+    cb(null, `empresa-${req.empresa._id}-${Date.now()}.jpg`);
+  },
+});
+
+const upload = multer({ storage });
+
 
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
@@ -54,6 +67,14 @@ router.put(
   authController.protect,
   produtoController.editarProduto
 )
+
+// Rota para upload da imagem
+router.put(
+  "/atualizar_imagem",
+  authController.protect,
+  upload.single("imagem"),
+  empresaController.atualizarImagemEmpresa
+);
 
 router.put('/editar_armazem/:armazemId', authController.protect, armazemController.editarArmazem);
 

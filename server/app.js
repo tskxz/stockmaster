@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 var cors = require('cors')
 
 const empresaRoutes = require("./routes/empresaRoutes");
@@ -14,6 +15,9 @@ app.use(cors())
 // Routes
 app.use("/api/empresas", empresaRoutes);
 app.use("/api/categorias", categoriaRoutes);
+
+// Servir imagens
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Middleware para erros
 app.use(errorMiddleware);
