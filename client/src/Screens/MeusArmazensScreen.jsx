@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { ListGroup, Container, Row, Col, Alert, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/screens/meusarmazens.css";
 
@@ -35,106 +34,95 @@ const MeusArmazensScreen = () => {
         }, []);
 
         if (loading) {
-                return <div>Carregando...</div>;
+                return <div className="loading">Carregando...</div>;
         }
 
         if (error) {
-                return <Alert variant="danger">{error}</Alert>;
+                return <div className="error">{error}</div>;
         }
 
         return (
-                <div className="app">
-                        <Container>
-                                <Row className="mb-4">
-                                        <Col>
-                                                <div className="titulo-button">
-                                                        <h2>Meus Armazéns</h2>
-                                                        <button
-                                                                variant="primary"
-                                                                onClick={() =>
-                                                                        navigate(
-                                                                                "/criararmazem",
-                                                                        )
+                <div className="armazens-screen">
+                        <div className="header">
+                                <h1>Meus Armazéns</h1>
+                                <button
+                                        className="add-button"
+                                        onClick={() =>
+                                                navigate("/criararmazem")
+                                        }
+                                >
+                                        + Adicionar Armazém
+                                </button>
+                        </div>
+                        {armazens.length === 0 ? (
+                                <div className="empty-state">
+                                        <p>
+                                                Você não tem armazéns
+                                                cadastrados.
+                                        </p>
+                                        <button
+                                                onClick={() =>
+                                                        navigate(
+                                                                "/criararmazem",
+                                                        )
+                                                }
+                                        >
+                                                Adicionar seu primeiro armazém
+                                        </button>
+                                </div>
+                        ) : (
+                                <div className="armazens-grid">
+                                        {armazens.map((armazem) => (
+                                                <div
+                                                        key={armazem._id}
+                                                        className="armazem-card"
+                                                >
+                                                        <h2>{armazem.nome}</h2>
+                                                        <p>
+                                                                <strong>
+                                                                        Endereço:
+                                                                </strong>{" "}
+                                                                {
+                                                                        armazem.endereco
                                                                 }
-                                                                className="adicionararmazens"
-                                                        >
-                                                                +
-                                                        </button>
+                                                        </p>
+                                                        <p>
+                                                                <strong>
+                                                                        Capacidade:
+                                                                </strong>{" "}
+                                                                {
+                                                                        armazem.capacidade
+                                                                }
+                                                        </p>
+                                                        <p className="armazem-id">
+                                                                <strong>
+                                                                        ID:
+                                                                </strong>{" "}
+                                                                {armazem._id}
+                                                        </p>
+                                                        <div className="card-actions">
+                                                                <button
+                                                                        onClick={() =>
+                                                                                navigate(
+                                                                                        `/editar_armazem/${armazem._id}`,
+                                                                                )
+                                                                        }
+                                                                        className="edit-button"
+                                                                >
+                                                                        Editar
+                                                                </button>
+                                                                <Link
+                                                                        to={`/produtos/${armazem._id}`}
+                                                                        className="view-products"
+                                                                >
+                                                                        Ver
+                                                                        Produtos
+                                                                </Link>
+                                                        </div>
                                                 </div>
-                                        </Col>
-                                </Row>
-                                <Row>
-                                        <Col>
-                                                {armazens.length === 0 ? (
-                                                        <Alert variant="info">
-                                                                Você não tem
-                                                                armazéns
-                                                                cadastrados.
-                                                        </Alert>
-                                                ) : (
-                                                        <ListGroup className="container-armazens">
-                                                                {armazens.map(
-                                                                        (
-                                                                                armazem,
-                                                                        ) => (
-                                                                                <ListGroup.Item
-                                                                                        className="lista-armazens"
-                                                                                        key={
-                                                                                                armazem._id
-                                                                                        }
-                                                                                >
-                                                                                        <h1 className="nome-armazem">
-                                                                                                {
-                                                                                                        armazem.nome
-                                                                                                }
-                                                                                        </h1>
-                                                                                        <p className="morada-armazem">
-                                                                                                {
-                                                                                                        armazem.endereco
-                                                                                                }
-                                                                                        </p>
-                                                                                        <p className="capacidade-armazem">
-                                                                                                Capacidade:{" "}
-                                                                                                {
-                                                                                                        armazem.capacidade
-                                                                                                }
-                                                                                        </p>
-                                                                                        
-                                                                                        <p className="morada-armazem">
-                                                                                                ID: 
-                                                                                                {
-                                                                                                        armazem._id
-                                                                                                }
-                                                                                        </p>
-                                                                                        <div className="ver-editar">
-                                                                                                <Button
-                                                                                                        variant="warning"
-                                                                                                        onClick={() =>
-                                                                                                                navigate(
-                                                                                                                        `/editar_armazem/${armazem._id}`,
-                                                                                                                )
-                                                                                                        }
-                                                                                                        className="editar-armazem"
-                                                                                                >
-                                                                                                        Editar
-                                                                                                </Button>
-                                                                                                {/* Link para a página de produtos do armazém */}
-                                                                                                <Link
-                                                                                                        to={`/produtos/${armazem._id}`}
-                                                                                                        className="ver-produtos"
-                                                                                                >
-                                                                                                        Ver
-                                                                                                        Produtos
-                                                                                                </Link>
-                                                                                        </div>
-                                                                                </ListGroup.Item>
-                                                                        ),
-                                                                )}
-                                                        </ListGroup>
-                                                )}
-                                        </Col>
-                                </Row>
-                        </Container>
+                                        ))}
+                                </div>
+                        )}
                 </div>
         );
 };
