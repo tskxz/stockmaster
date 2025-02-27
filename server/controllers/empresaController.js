@@ -1,6 +1,6 @@
 const empresaService = require('../services/EmpresaService');
 const Empresa = require('../models/Empresa');
-
+const bcrypt = require('bcrypt')
 // Get All Empresas
 const getAllEmpresas = async function (req, res) {
   try {
@@ -53,7 +53,28 @@ const createEmpresa = async (req, res) => {
 
 const updateEmpresa = async function (req, res) {
   try {
-    const updatedEmpresa = await empresaService.updateEmpresa(req.params.id, req.body);
+    const empresaId = req.empresa._id;
+    const dados = req.body;
+
+    if (dados.password) {
+      if (dados.password.length < 8) {
+        return res.status(400).json({
+          status: "error",
+          message: "A password deve ter pelo menos 8 caracteres.",
+        });
+      }
+      // Encriptar a nova passe
+      dados.password = await bcrypt.hash(dados.password, 12);
+      dados.passwordConfirm = undefined; 
+    } else {
+
+      delete dados.password;
+      delete dados.passwordConfirm;
+    }
+
+    // Atualiza os dados da empresa
+    const updatedEmpresa = await empresaService.updateEmpresa(empresaId, dados);
+    
     res.status(200).json({
       status: "success",
       data: { empresa: updatedEmpresa },
