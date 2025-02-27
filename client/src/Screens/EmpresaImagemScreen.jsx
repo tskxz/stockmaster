@@ -7,6 +7,7 @@ const EmpresaImagemScreen = () => {
   const [imagem, setImagem] = useState(null);
   const [preview, setPreview] = useState(null);
   const [mensagem, setMensagem] = useState("");
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
 
   useEffect(() => {
     const fetchEmpresa = async () => {
@@ -15,23 +16,25 @@ const EmpresaImagemScreen = () => {
         const response = await axios.get("http://localhost:8000/api/empresas/minha_empresa", {
           headers: { Authorization: `Bearer ${token}` },
         });
-  
-        console.log(response.data); // Verifique a estrutura dos dados no console
-        setEmpresa(response.data.data.empresa); // Ajustado para acessar corretamente a empresa
+
+        setEmpresa(response.data.data.empresa);
+        setFormData({ 
+          name: response.data.data.empresa.name, 
+          email: response.data.data.empresa.email, 
+          password: "" 
+        });
       } catch (error) {
         setMensagem("Erro ao carregar os dados da empresa.");
       }
     };
-  
+
     fetchEmpresa();
   }, []);
-
-  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setImagem(file);
-    setPreview(URL.createObjectURL(file)); // Gerar uma pré-visualização da imagem
+    setPreview(URL.createObjectURL(file)); 
   };
 
   const handleUpload = async () => {
@@ -59,6 +62,24 @@ const EmpresaImagemScreen = () => {
     }
   };
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const token = localStorage.getItem("jwt");
+      await axios.put("http://localhost:8000/api/empresas/editar_empresa", formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setMensagem("Dados atualizados com sucesso!");
+      setEmpresa({ ...empresa, ...formData });
+    } catch (error) {
+      setMensagem("Erro ao atualizar os dados.");
+    }
+  };
+
   return (
     <Container className="mt-4">
       <h2>Imagem da Empresa</h2>
@@ -83,12 +104,25 @@ const EmpresaImagemScreen = () => {
           </Button>
 
           <div className="mt-3">
-            <p><strong>Nome:</strong> {empresa.name}</p>
-            <p><strong>Imagem:</strong> http://localhost:8000/{empresa.imagem}</p>
-            <p><strong>Email:</strong> {empresa.email}</p>
-            <p><strong>Função:</strong> {empresa.role === "admin" ? "Administrador" : "Empresa"}</p>
+            <Form.Group className="mt-3">
+              <Form.Label>Nome</Form.Label>
+              <Form.Control type="text" name="name" value={formData.name} onChange={handleChange} />
+            </Form.Group>
+
+            <Form.Group className="mt-3">
+              <Form.Label>Email</Form.Label>
+              <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} />
+            </Form.Group>
+
+            <Form.Group className="mt-3">
+              <Form.Label>Password (deixe em branco para não alterar)</Form.Label>
+              <Form.Control type="password" name="password" value={formData.password} onChange={handleChange} />
+            </Form.Group>
+
+            <Button className="mt-3" variant="success" onClick={handleUpdate}>
+              Atualizar Dados
+            </Button>
           </div>
-          
         </>
       )}
     </Container>
