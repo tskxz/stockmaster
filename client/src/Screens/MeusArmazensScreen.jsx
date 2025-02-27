@@ -99,6 +99,13 @@ const MeusArmazensScreen = () => {
                                                                                                         armazem.capacidade
                                                                                                 }
                                                                                         </p>
+                                                                                        
+                                                                                        <p className="morada-armazem">
+                                                                                                ID: 
+                                                                                                {
+                                                                                                        armazem._id
+                                                                                                }
+                                                                                        </p>
                                                                                         <div className="ver-editar">
                                                                                                 <Button
                                                                                                         variant="warning"
