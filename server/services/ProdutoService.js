@@ -33,6 +33,11 @@ class ProdutoService extends ProdutoBaseService {
       throw new Error("A capacidade do armazém seria excedida.");
     }
 
+    // Verifica se o stock_minimo não ultrapassa a capacidade do armazém
+    if (dadosProduto.stock_minimo && parseInt(dadosProduto.stock_minimo, 10) > armazem.capacidade) {
+      throw new Error(`O estoque mínimo (${dadosProduto.stock_minimo}) não pode ser maior que a capacidade do armazém (${armazem.capacidade}).`);
+    }
+
     // Chama o método da classe base para criar o produto
     return super.criarProduto(dadosProduto, empresaId);
   }
@@ -61,6 +66,11 @@ class ProdutoService extends ProdutoBaseService {
 
     if (totalStockAtualizado > armazem.capacidade) {
       throw new Error("A capacidade do armazém seria excedida.");
+    }
+
+    // Verifica se o stock_minimo não ultrapassa a capacidade do armazém
+    if (dadosAtualizados.stock_minimo && parseInt(dadosAtualizados.stock_minimo, 10) > armazem.capacidade) {
+      throw new Error(`O estoque mínimo (${dadosAtualizados.stock_minimo}) não pode ser maior que a capacidade do armazém (${armazem.capacidade}).`);
     }
 
     // Chama o método da classe base para editar o produto
