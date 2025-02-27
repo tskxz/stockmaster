@@ -98,6 +98,34 @@ const minha_empresa = async function (req, res) {
   }
 };
 
+const atualizarImagemEmpresa = async function (req, res) {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        status: "error",
+        message: "Nenhuma imagem foi enviada.",
+      });
+    }
+
+    const empresa = await Empresa.findByIdAndUpdate(
+      req.empresa._id,
+      { imagem: req.file.path }, // Salva o caminho da imagem
+      { new: true }
+    );
+
+    res.status(200).json({
+      status: "success",
+      message: "Imagem atualizada com sucesso!",
+      data: { imagem: empresa.imagem },
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Erro ao atualizar a imagem.",
+    });
+  }
+}
+
 module.exports = {
   getAllEmpresas,
   getEmpresa,
@@ -105,4 +133,5 @@ module.exports = {
   updateEmpresa,
   deleteEmpresa,
   minha_empresa,
+  atualizarImagemEmpresa,
 };
