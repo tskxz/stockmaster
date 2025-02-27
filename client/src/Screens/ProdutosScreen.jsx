@@ -56,6 +56,7 @@ const ProdutosScreen = () => {
       <Row className="mb-4">
         <Col>
         <h2>Produtos do Armazém "{armazemNome}"</h2>
+        <h4>ID do Armazém: {armazemId}</h4>
           <Button variant="primary" onClick={() => navigate(`/adicionar_produto/${armazemId}`)}>
             Adicionar Produto
           </Button>
@@ -74,6 +75,7 @@ const ProdutosScreen = () => {
                   <p>Preço: {produto.preco}€</p>
                   <p>Estoque: {produto.stock_total}</p>
                   <p>Categoria: {produto.categoria ? produto.categoria.nome : ""}</p>
+                  <p>ID: {produto._id}</p>
                   <p>{produto.status}</p>
                   <Button
     variant="warning"

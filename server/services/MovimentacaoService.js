@@ -6,6 +6,11 @@ class MovimentacaoService {
   constructor() {}
 
   async criarMovimentacao({ tipo, quantidade, produtoId, armazemId, observacao }, empresaId) {
+    const quantidadeNum = parseInt(quantidade, 10);  // Converter a quantidade para número
+    if (isNaN(quantidadeNum)) {
+      throw new Error("Quantidade inválida.");
+    }
+
     // Verifica se o armazém pertence à empresa autenticada
     const armazem = await Armazem.findOne({ _id: armazemId, empresa: empresaId });
     if (!armazem) {
@@ -18,23 +23,25 @@ class MovimentacaoService {
       throw new Error("O produto não pertence à empresa autenticada ou não está nesse armazém.");
     }
 
-    if (tipo === "saida" && produto.stock_total < quantidade) {
+    // Verifica se há estoque suficiente para saída
+    if (tipo === "saida" && produto.stock_total < quantidadeNum) {
       throw new Error("Estoque insuficiente para essa saída.");
     }
 
     // Atualiza o estoque do produto
     if (tipo === "entrada") {
-      produto.stock_total += quantidade;
+      produto.stock_total += quantidadeNum;  // Somar a quantidade de entrada
     } else if (tipo === "saida") {
-      produto.stock_total -= quantidade;
+      produto.stock_total -= quantidadeNum;  // Subtrair a quantidade de saída
     }
 
+    // Salva o produto com o estoque atualizado
     await produto.save();
 
     // Registra a movimentação
     const movimentacao = await Movimentacao.create({
       tipo,
-      quantidade,
+      quantidade: quantidadeNum,  // Salva a quantidade como número
       produto: produtoId,
       armazem: armazemId,
       empresa: empresaId,
