@@ -11,11 +11,17 @@ const HomeScreen = () => {
 
                                 <div className="app-description">
                                         <p>
-                                                A sua solução para gestão de
-                                                stock empresarial.<br></br>
-                                                Comece agora e leve a gestão da
-                                                sua empresa para o próximo
-                                                nível!
+                                                A solução completa e eficiente
+                                                para a gestão de stock da sua
+                                                empresa.
+                                                <br />
+                                                Otimize processos,reduza
+                                                desperdícios e maximize os
+                                                lucros com facilidade.
+                                                <br />
+                                                Comece agora e leve a gestão do
+                                                seu negócio para um novo
+                                                patamar!
                                         </p>
                                 </div>
                                 <ul>
@@ -25,7 +31,8 @@ const HomeScreen = () => {
                                                         className="button"
                                                         to={"/meus_armazens"}
                                                 >
-                                                        Veja os seus armazéns{" "}
+                                                        Veja os seus
+                                                        armazéns{" "}
                                                 </Link>
                                         </li>
                                 </ul>
