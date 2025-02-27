@@ -15,14 +15,18 @@ const EmpresaImagemScreen = () => {
         const response = await axios.get("http://localhost:8000/api/empresas/minha_empresa", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setEmpresa(response.data.data);
+  
+        console.log(response.data); // Verifique a estrutura dos dados no console
+        setEmpresa(response.data.data.empresa); // Ajustado para acessar corretamente a empresa
       } catch (error) {
         setMensagem("Erro ao carregar os dados da empresa.");
       }
     };
-
+  
     fetchEmpresa();
   }, []);
+
+  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -58,7 +62,7 @@ const EmpresaImagemScreen = () => {
   return (
     <Container className="mt-4">
       <h2>Imagem da Empresa</h2>
-
+      
       {mensagem && <Alert variant="info">{mensagem}</Alert>}
 
       {empresa && (
@@ -77,6 +81,14 @@ const EmpresaImagemScreen = () => {
           <Button className="mt-2" variant="primary" onClick={handleUpload}>
             Atualizar Imagem
           </Button>
+
+          <div className="mt-3">
+            <p><strong>Nome:</strong> {empresa.name}</p>
+            <p><strong>Imagem:</strong> http://localhost:8000/{empresa.imagem}</p>
+            <p><strong>Email:</strong> {empresa.email}</p>
+            <p><strong>Função:</strong> {empresa.role === "admin" ? "Administrador" : "Empresa"}</p>
+          </div>
+          
         </>
       )}
     </Container>
