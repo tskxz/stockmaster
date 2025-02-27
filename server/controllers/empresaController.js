@@ -1,4 +1,5 @@
 const empresaService = require('../services/EmpresaService');
+const Empresa = require('../models/Empresa');
 
 // Get All Empresas
 const getAllEmpresas = async function (req, res) {
@@ -113,6 +114,8 @@ const atualizarImagemEmpresa = async function (req, res) {
       { new: true }
     );
 
+    console.log(empresa)
+
     res.status(200).json({
       status: "success",
       message: "Imagem atualizada com sucesso!",
@@ -121,7 +124,7 @@ const atualizarImagemEmpresa = async function (req, res) {
   } catch (error) {
     res.status(500).json({
       status: "error",
-      message: "Erro ao atualizar a imagem.",
+      message: error,
     });
   }
 }

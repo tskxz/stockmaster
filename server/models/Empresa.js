@@ -22,7 +22,7 @@ const empresaSchema = new mongoose.Schema({
     select: false,
   },
   active: { type: Boolean, default: true, select: false },
-  image : { type: String, default: "default.png"}
+  imagem : { type: String, default: "default.png"}
 });
 
 empresaSchema.pre("save", async function (next) {
