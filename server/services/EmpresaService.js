@@ -34,7 +34,7 @@ class EmpresaService extends EmpresaBaseService {
 
   // Método para editar a empresa com validações específicas
   async updateEmpresa(id, dados) {
-    return await this.update(id, dados);
+    return await EmpresaModel.findByIdAndUpdate(id, dados, { new: true, runValidators: true });
   }
 
   // Método para excluir a empresa

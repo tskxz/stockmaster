@@ -68,6 +68,9 @@ router.put(
   produtoController.editarProduto
 )
 
+router.put("/editar_empresa", authController.protect, empresaController.updateEmpresa);
+
+
 // Rota para upload da imagem
 router.put(
   "/atualizar_imagem",
