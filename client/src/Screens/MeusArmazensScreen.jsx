@@ -53,6 +53,32 @@ const MeusArmazensScreen = () => {
                                 >
                                         + Adicionar Armazém
                                 </button>
+                                <button
+                                        className="add-button"
+                                        onClick={() =>
+                                                navigate("/criar-categoria")
+                                        }
+                                >
+                                        + Criar Categoria
+                                </button>
+                                <button
+                                        className="add-button"
+                                        onClick={() =>
+                                                navigate(
+                                                        "/relatorio-inventario",
+                                                )
+                                        }
+                                >
+                                        Ver Relatório
+                                </button>
+                                <button
+                                        className="add-button"
+                                        onClick={() =>
+                                                navigate("/movimentacoes")
+                                        }
+                                >
+                                        Ver Movimentos
+                                </button>
                         </div>
                         {armazens.length === 0 ? (
                                 <div className="empty-state">
