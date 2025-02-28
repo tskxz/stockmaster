@@ -2,6 +2,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/screens/meusarmazens.css";
+import {
+        FaPlus,
+        FaClipboardList,
+        FaExchangeAlt,
+        FaWarehouse,
+} from "react-icons/fa";
 
 const MeusArmazensScreen = () => {
         const [armazens, setArmazens] = useState([]);
@@ -44,41 +50,61 @@ const MeusArmazensScreen = () => {
         return (
                 <div className="armazens-screen">
                         <div className="header">
-                                <h1>Meus Armazéns</h1>
-                                <button
-                                        className="add-button"
-                                        onClick={() =>
-                                                navigate("/criararmazem")
-                                        }
-                                >
-                                        + Adicionar Armazém
-                                </button>
-                                <button
-                                        className="add-button"
-                                        onClick={() =>
-                                                navigate("/criar-categoria")
-                                        }
-                                >
-                                        + Criar Categoria
-                                </button>
-                                <button
-                                        className="add-button"
-                                        onClick={() =>
-                                                navigate(
-                                                        "/relatorio-inventario",
-                                                )
-                                        }
-                                >
-                                        Ver Relatório
-                                </button>
-                                <button
-                                        className="add-button"
-                                        onClick={() =>
-                                                navigate("/movimentacoes")
-                                        }
-                                >
-                                        Ver Movimentos
-                                </button>
+                                <h1 className="title">Meus Armazéns</h1>
+                                <div className="action-buttons">
+                                        <button
+                                                className="action-button"
+                                                onClick={() =>
+                                                        navigate(
+                                                                "/criararmazem",
+                                                        )
+                                                }
+                                        >
+                                                <FaWarehouse className="button-icon" />
+                                                <span className="button-text">
+                                                        Adicionar Armazém
+                                                </span>
+                                        </button>
+                                        <button
+                                                className="action-button"
+                                                onClick={() =>
+                                                        navigate(
+                                                                "/criar-categoria",
+                                                        )
+                                                }
+                                        >
+                                                <FaPlus className="button-icon" />
+                                                <span className="button-text">
+                                                        Criar Categoria
+                                                </span>
+                                        </button>
+                                        <button
+                                                className="action-button"
+                                                onClick={() =>
+                                                        navigate(
+                                                                "/relatorio-inventario",
+                                                        )
+                                                }
+                                        >
+                                                <FaClipboardList className="button-icon" />
+                                                <span className="button-text">
+                                                        Ver Relatório
+                                                </span>
+                                        </button>
+                                        <button
+                                                className="action-button"
+                                                onClick={() =>
+                                                        navigate(
+                                                                "/movimentacoes",
+                                                        )
+                                                }
+                                        >
+                                                <FaExchangeAlt className="button-icon" />
+                                                <span className="button-text">
+                                                        Ver Movimentos
+                                                </span>
+                                        </button>
+                                </div>
                         </div>
                         {armazens.length === 0 ? (
                                 <div className="empty-state">

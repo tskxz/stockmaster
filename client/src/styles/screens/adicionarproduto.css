@@ -1,0 +1,101 @@
+.adicionar-produto-screen {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+
+        padding: 20px;
+}
+
+.adicionar-produto-container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        width: 100%;
+        max-width: 600px;
+}
+
+h2 {
+        color: #52887f;
+        font-size: 24px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+}
+
+.error-message {
+        background-color: #ffebee;
+        color: #c62828;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+}
+
+.form-group {
+        margin-bottom: 20px;
+}
+
+.form-row {
+        display: flex;
+        gap: 20px;
+}
+
+.form-row .form-group {
+        flex: 1;
+}
+
+label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+        font-weight: 500;
+}
+
+input,
+textarea,
+select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+}
+
+textarea {
+        resize: vertical;
+        min-height: 100px;
+}
+
+.submit-button {
+        background-color: #52887f;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+        background-color: #69c18a;
+}
+
+.submit-button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+        .form-row {
+                flex-direction: column;
+                gap: 0;
+        }
+}

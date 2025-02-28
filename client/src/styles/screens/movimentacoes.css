@@ -1,0 +1,122 @@
+.movimentacoes-screen {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+}
+
+h2 {
+        color: #52887f;
+        font-size: 24px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+}
+
+.mensagem {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+}
+
+.movimentacoes-container {
+        display: flex;
+        gap: 30px;
+}
+
+.form-section,
+.table-section {
+        flex: 1;
+}
+
+h3 {
+        color: #52887f;
+        font-size: 20px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+}
+
+.form-group {
+        margin-bottom: 15px;
+}
+
+label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+        font-weight: 500;
+}
+
+input,
+select,
+textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+}
+
+textarea {
+        resize: vertical;
+        min-height: 100px;
+}
+
+.submit-button {
+        background-color: #52887f;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+        background-color: #69c18a;
+}
+
+.submit-button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+}
+
+.table-container {
+        overflow-x: auto;
+}
+
+table {
+        width: 100%;
+        border-collapse: collapse;
+}
+
+th,
+td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+}
+
+th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+}
+
+tr:nth-child(even) {
+        background-color: #f9f9f9;
+}
+
+tr:hover {
+        background-color: #f5f5f5;
+}
+
+@media (max-width: 768px) {
+        .movimentacoes-container {
+                flex-direction: column;
+        }
+}

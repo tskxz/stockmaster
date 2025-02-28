@@ -1,154 +1,292 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Container, Form, Button, Alert, Table } from 'react-bootstrap';
+"use client";
+
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { FaExchangeAlt, FaPlus, FaSearch } from "react-icons/fa";
+import "../styles/screens/movimentacoes.css";
 
 const MovimentacoesScreen = () => {
-  const [tipo, setTipo] = useState('');
-  const [quantidade, setQuantidade] = useState('');
-  const [produtoId, setProdutoId] = useState('');
-  const [armazemId, setArmazemId] = useState('');
-  const [observacao, setObservacao] = useState('');
-  const [movimentacoes, setMovimentacoes] = useState([]);
-  const [mensagem, setMensagem] = useState('');
-  const [token] = useState(localStorage.getItem('jwt')); // Pega o token do localStorage
-  
-  // Função para enviar a movimentação
-  const handleCreateMovimentacao = async (e) => {
-    e.preventDefault();
-    const body = {
-      tipo,
-      quantidade,
-      produtoId,
-      armazemId,
-      observacao,
-    };
-    
-    try {
-      const response = await axios.post(
-        'http://localhost:8000/api/empresas/movimentacao',
-        body,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      setMensagem('Movimentação criada com sucesso!');
-      setTipo('');
-      setQuantidade('');
-      setProdutoId('');
-      setArmazemId('');
-      setObservacao('');
-    } catch (error) {
-      setMensagem('Erro ao criar movimentação');
-    }
-  };
+        const [formData, setFormData] = useState({
+                tipo: "",
+                quantidade: "",
+                produtoId: "",
+                armazemId: "",
+                observacao: "",
+        });
+        const [movimentacoes, setMovimentacoes] = useState([]);
+        const [mensagem, setMensagem] = useState("");
+        const [loading, setLoading] = useState(false);
+        const [token] = useState(localStorage.getItem("jwt"));
 
-  // Função para listar as movimentações
-  const fetchMovimentacoes = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/empresas/movimentacoes', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setMovimentacoes(response.data.data.movimentacoes);
-    } catch (error) {
-      setMensagem('Erro ao carregar movimentações');
-    }
-  };
+        const handleChange = (e) => {
+                const { name, value } = e.target;
+                setFormData((prevState) => ({
+                        ...prevState,
+                        [name]: value,
+                }));
+        };
 
-  useEffect(() => {
-    fetchMovimentacoes(); // Carrega as movimentações na primeira vez
-  }, []);
+        const handleCreateMovimentacao = async (e) => {
+                e.preventDefault();
+                setLoading(true);
+                try {
+                        const response = await axios.post(
+                                "http://localhost:8000/api/empresas/movimentacao",
+                                formData,
+                                {
+                                        headers: {
+                                                Authorization: `Bearer ${token}`,
+                                        },
+                                },
+                        );
+                        setMensagem("Movimentação criada com sucesso!");
+                        setFormData({
+                                tipo: "",
+                                quantidade: "",
+                                produtoId: "",
+                                armazemId: "",
+                                observacao: "",
+                        });
+                        fetchMovimentacoes();
+                } catch (error) {
+                        setMensagem("Erro ao criar movimentação");
+                } finally {
+                        setLoading(false);
+                }
+        };
 
-  return (
-    <Container className="mt-4">
-      <h2>Movimentações</h2>
+        const fetchMovimentacoes = async () => {
+                try {
+                        const response = await axios.get(
+                                "http://localhost:8000/api/empresas/movimentacoes",
+                                {
+                                        headers: {
+                                                Authorization: `Bearer ${token}`,
+                                        },
+                                },
+                        );
+                        setMovimentacoes(response.data.data.movimentacoes);
+                } catch (error) {
+                        setMensagem("Erro ao carregar movimentações");
+                }
+        };
 
-      {mensagem && <Alert variant="info">{mensagem}</Alert>}
+        useEffect(() => {
+                fetchMovimentacoes();
+        }, []);
 
-      {/* Formulário para criar movimentação */}
-      <h3>Criar Movimentação</h3>
-      <Form onSubmit={handleCreateMovimentacao}>
-        <Form.Group controlId="tipo">
-          <Form.Label>Tipo</Form.Label>
-          <Form.Control
-            as="select"
-            value={tipo}
-            onChange={(e) => setTipo(e.target.value)}
-          >
-            <option value="">Selecione</option>
-            <option value="entrada">Entrada</option>
-            <option value="saida">Saída</option>
-          </Form.Control>
-        </Form.Group>
+        return (
+                <div className="movimentacoes-screen">
+                        <h2>
+                                <FaExchangeAlt /> Movimentações
+                        </h2>
 
-        <Form.Group controlId="quantidade">
-          <Form.Label>Quantidade</Form.Label>
-          <Form.Control
-            type="number"
-            value={quantidade}
-            onChange={(e) => setQuantidade(e.target.value)}
-          />
-        </Form.Group>
+                        {mensagem && <div className="mensagem">{mensagem}</div>}
 
-        <Form.Group controlId="produtoId">
-          <Form.Label>ID do Produto</Form.Label>
-          <Form.Control
-            type="text"
-            value={produtoId}
-            onChange={(e) => setProdutoId(e.target.value)}
-          />
-        </Form.Group>
+                        <div className="movimentacoes-container">
+                                <div className="form-section">
+                                        <h3>
+                                                <FaPlus /> Criar Movimentação
+                                        </h3>
+                                        <form
+                                                onSubmit={
+                                                        handleCreateMovimentacao
+                                                }
+                                        >
+                                                <div className="form-group">
+                                                        <label htmlFor="tipo">
+                                                                Tipo
+                                                        </label>
+                                                        <select
+                                                                id="tipo"
+                                                                name="tipo"
+                                                                value={
+                                                                        formData.tipo
+                                                                }
+                                                                onChange={
+                                                                        handleChange
+                                                                }
+                                                                required
+                                                        >
+                                                                <option value="">
+                                                                        Selecione
+                                                                </option>
+                                                                <option value="entrada">
+                                                                        Entrada
+                                                                </option>
+                                                                <option value="saida">
+                                                                        Saída
+                                                                </option>
+                                                        </select>
+                                                </div>
 
-        <Form.Group controlId="armazemId">
-          <Form.Label>ID do Armazém</Form.Label>
-          <Form.Control
-            type="text"
-            value={armazemId}
-            onChange={(e) => setArmazemId(e.target.value)}
-          />
-        </Form.Group>
+                                                <div className="form-group">
+                                                        <label htmlFor="quantidade">
+                                                                Quantidade
+                                                        </label>
+                                                        <input
+                                                                type="number"
+                                                                id="quantidade"
+                                                                name="quantidade"
+                                                                value={
+                                                                        formData.quantidade
+                                                                }
+                                                                onChange={
+                                                                        handleChange
+                                                                }
+                                                                required
+                                                        />
+                                                </div>
 
-        <Form.Group controlId="observacao">
-          <Form.Label>Observação</Form.Label>
-          <Form.Control
-            type="text"
-            value={observacao}
-            onChange={(e) => setObservacao(e.target.value)}
-          />
-        </Form.Group>
+                                                <div className="form-group">
+                                                        <label htmlFor="produtoId">
+                                                                ID do Produto
+                                                        </label>
+                                                        <input
+                                                                type="text"
+                                                                id="produtoId"
+                                                                name="produtoId"
+                                                                value={
+                                                                        formData.produtoId
+                                                                }
+                                                                onChange={
+                                                                        handleChange
+                                                                }
+                                                                required
+                                                        />
+                                                </div>
 
-        <Button variant="primary" type="submit">
-          Criar Movimentação
-        </Button>
-      </Form>
+                                                <div className="form-group">
+                                                        <label htmlFor="armazemId">
+                                                                ID do Armazém
+                                                        </label>
+                                                        <input
+                                                                type="text"
+                                                                id="armazemId"
+                                                                name="armazemId"
+                                                                value={
+                                                                        formData.armazemId
+                                                                }
+                                                                onChange={
+                                                                        handleChange
+                                                                }
+                                                                required
+                                                        />
+                                                </div>
 
-      {/* Tabela de Movimentações */}
-      <h3 className="mt-4">Movimentações Registadas</h3>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Tipo</th>
-            <th>Quantidade</th>
-            <th>Produto</th>
-            <th>Armazém</th>
-            <th>Data do Movimento</th>
-            <th>Observação</th>
-          </tr>
-        </thead>
-        <tbody>
-          {movimentacoes.map((movimentacao) => (
-            <tr key={movimentacao._id}>
-              <td>{movimentacao.tipo}</td>
-              <td>{movimentacao.quantidade}</td>
-              <td>{movimentacao.produto.nome}</td>
-              <td>{movimentacao.armazem.nome}</td>
-              <td>{new Date(movimentacao.data_movimento).toLocaleString()}</td>
-              <td>{movimentacao.observacao}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    </Container>
-  );
+                                                <div className="form-group">
+                                                        <label htmlFor="observacao">
+                                                                Observação
+                                                        </label>
+                                                        <textarea
+                                                                id="observacao"
+                                                                name="observacao"
+                                                                value={
+                                                                        formData.observacao
+                                                                }
+                                                                onChange={
+                                                                        handleChange
+                                                                }
+                                                        />
+                                                </div>
+
+                                                <button
+                                                        type="submit"
+                                                        className="submit-button"
+                                                        disabled={loading}
+                                                >
+                                                        {loading
+                                                                ? "Criando..."
+                                                                : "Criar Movimentação"}
+                                                </button>
+                                        </form>
+                                </div>
+
+                                <div className="table-section">
+                                        <h3>
+                                                <FaSearch /> Movimentações
+                                                Registradas
+                                        </h3>
+                                        <div className="table-container">
+                                                <table>
+                                                        <thead>
+                                                                <tr>
+                                                                        <th>
+                                                                                Tipo
+                                                                        </th>
+                                                                        <th>
+                                                                                Quantidade
+                                                                        </th>
+                                                                        <th>
+                                                                                Produto
+                                                                        </th>
+                                                                        <th>
+                                                                                Armazém
+                                                                        </th>
+                                                                        <th>
+                                                                                Data
+                                                                                do
+                                                                                Movimento
+                                                                        </th>
+                                                                        <th>
+                                                                                Observação
+                                                                        </th>
+                                                                </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                                {movimentacoes.map(
+                                                                        (
+                                                                                movimentacao,
+                                                                        ) => (
+                                                                                <tr
+                                                                                        key={
+                                                                                                movimentacao._id
+                                                                                        }
+                                                                                >
+                                                                                        <td>
+                                                                                                {
+                                                                                                        movimentacao.tipo
+                                                                                                }
+                                                                                        </td>
+                                                                                        <td>
+                                                                                                {
+                                                                                                        movimentacao.quantidade
+                                                                                                }
+                                                                                        </td>
+                                                                                        <td>
+                                                                                                {
+                                                                                                        movimentacao
+                                                                                                                .produto
+                                                                                                                .nome
+                                                                                                }
+                                                                                        </td>
+                                                                                        <td>
+                                                                                                {
+                                                                                                        movimentacao
+                                                                                                                .armazem
+                                                                                                                .nome
+                                                                                                }
+                                                                                        </td>
+                                                                                        <td>
+                                                                                                {new Date(
+                                                                                                        movimentacao.data_movimento,
+                                                                                                ).toLocaleString()}
+                                                                                        </td>
+                                                                                        <td>
+                                                                                                {
+                                                                                                        movimentacao.observacao
+                                                                                                }
+                                                                                        </td>
+                                                                                </tr>
+                                                                        ),
+                                                                )}
+                                                        </tbody>
+                                                </table>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+        );
 };
 
 export default MovimentacoesScreen;

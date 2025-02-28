@@ -6,30 +6,51 @@
 }
 
 .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
+        margin-bottom: 30px;
 }
 
-h1 {
+.title {
         color: #52887f;
-        font-size: 28px;
+        font-size: 32px;
+        margin-bottom: 20px;
+        text-align: center;
 }
 
-.add-button {
+.action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+}
+
+.action-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background-color: #52887f;
         color: white;
         border: none;
-        padding: 10px 15px;
-        border-radius: 5px;
+        padding: 12px 20px;
+        border-radius: 8px;
         cursor: pointer;
         font-size: 16px;
-        transition: background-color 0.3s;
+        transition: all 0.3s ease;
+        min-width: 200px;
 }
 
-.add-button:hover {
+.action-button:hover {
         background-color: #69c18a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.button-icon {
+        margin-right: 10px;
+        font-size: 18px;
+}
+
+.button-text {
+        font-weight: 500;
 }
 
 .armazens-grid {

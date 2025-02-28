@@ -1,0 +1,91 @@
+.relatorio-inventario-screen {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+}
+
+h2 {
+        color: #52887f;
+        font-size: 24px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+}
+
+.summary-cards {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 30px;
+}
+
+.summary-card {
+        flex: 1;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        display: flex;
+        align-items: center;
+}
+
+.summary-icon {
+        font-size: 40px;
+        color: #52887f;
+        margin-right: 20px;
+}
+
+.summary-content h3 {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 5px;
+}
+
+.summary-content p {
+        font-size: 24px;
+        font-weight: bold;
+        color: #52887f;
+}
+
+.chart-container {
+        display: flex;
+        gap: 30px;
+        margin-top: 30px;
+}
+
+.chart {
+        flex: 1;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+}
+
+.chart h3 {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 15px;
+        text-align: center;
+}
+
+.loading,
+.error {
+        text-align: center;
+        padding: 20px;
+        font-size: 18px;
+}
+
+.loading {
+        color: #52887f;
+}
+
+.error {
+        color: #c62828;
+}
+
+@media (max-width: 768px) {
+        .summary-cards,
+        .chart-container {
+                flex-direction: column;
+        }
+}
