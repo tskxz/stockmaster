@@ -65,7 +65,7 @@ const ProdutosScreen = () => {
       <Row>
         <Col>
           {produtos.length === 0 ? (
-            <Alert variant="info">Não há produtos cadastrados neste armazém.</Alert>
+            <Alert variant="info">Não há produtos registados neste armazém.</Alert>
           ) : (
             <ListGroup>
               {produtos.map((produto) => (
