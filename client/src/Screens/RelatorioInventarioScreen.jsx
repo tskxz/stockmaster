@@ -1,5 +1,6 @@
 "use client";
 
+import "../styles/screens/relatorio.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { FaChartBar, FaWarehouse, FaBoxes } from "react-icons/fa";
@@ -14,7 +15,6 @@ import {
         Legend,
         ArcElement,
 } from "chart.js";
-import "../styles/screens/relatorio.css";
 
 Chart.register(
         CategoryScale,
@@ -61,11 +61,8 @@ const RelatorioInventarioScreen = () => {
                 fetchRelatorio();
         }, []);
 
-        if (!token) {
-          throw new Error("utilizador não autenticado. Faça login novamente.");
         if (loading) {
                 return <div className="loading">Carregando relatório...</div>;
-
         }
 
         if (error) {

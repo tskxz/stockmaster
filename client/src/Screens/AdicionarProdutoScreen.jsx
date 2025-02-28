@@ -1,26 +1,21 @@
-"use client";
-
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { FaBox, FaSave } from "react-icons/fa";
-import "../styles/screens/adicionarproduto.css";
 
 const AdicionarProdutoScreen = () => {
-        const { armazemId } = useParams();
-        const [formData, setFormData] = useState({
-                nome: "",
-                descricao: "",
-                preco: "",
-                stockTotal: "",
-                stockMinimo: "",
-                categoriaId: "",
-        });
+        const { armazemId } = useParams(); // Obter o ID do armazém da URL
+        const [nome, setNome] = useState("");
+        const [descricao, setDescricao] = useState("");
+        const [preco, setPreco] = useState("");
+        const [stockTotal, setStockTotal] = useState("");
+        const [stockMinimo, setStockMinimo] = useState("");
+        const [categoriaId, setCategoriaId] = useState(""); // Estado para categoria
         const [categorias, setCategorias] = useState([]);
         const [loading, setLoading] = useState(false);
         const [error, setError] = useState(null);
         const navigate = useNavigate();
-
+        // Buscar categorias ao carregar a página
         useEffect(() => {
                 const fetchCategorias = async () => {
                         try {
@@ -33,26 +28,22 @@ const AdicionarProdutoScreen = () => {
                                                 },
                                         },
                                 );
+
                                 setCategorias(response.data.data.categorias);
                         } catch (err) {
                                 setError("Erro ao carregar categorias.");
                         }
                 };
+
                 fetchCategorias();
         }, []);
-
-        const handleChange = (e) => {
-                const { name, value } = e.target;
-                setFormData((prevState) => ({
-                        ...prevState,
-                        [name]: value,
-                }));
-        };
-
         const handleSubmit = async (e) => {
                 e.preventDefault();
-                if (!formData.nome || !formData.preco || !formData.stockTotal) {
-                        setError("Nome, preço e stock total são obrigatórios");
+
+                if (!nome || !preco || !stockTotal) {
+                        setError(
+                                "Nome, preço e estoque total são obrigatórios",
+                        );
                         return;
                 }
 
@@ -62,7 +53,15 @@ const AdicionarProdutoScreen = () => {
                         const token = localStorage.getItem("jwt");
                         const response = await axios.post(
                                 `http://localhost:8000/api/empresas/criar_produto`,
-                                { ...formData, armazemId },
+                                {
+                                        nome,
+                                        descricao,
+                                        preco,
+                                        stock_total: stockTotal,
+                                        stock_minimo: stockMinimo,
+                                        armazemId,
+                                        categoriaId,
+                                },
                                 {
                                         headers: {
                                                 Authorization: `Bearer ${token}`,
@@ -71,178 +70,237 @@ const AdicionarProdutoScreen = () => {
                         );
 
                         if (response.status === 201) {
-                                navigate(`/produtos/${armazemId}`);
+                                setLoading(false);
+                                navigate(`/produtos/${armazemId}`); // Redireciona para a lista de produtos do armazém
                         }
                 } catch (err) {
-                        setError(
-                                err.response?.data?.message ||
-                                        "Ocorreu um erro inesperado.",
-                        );
-                } finally {
                         setLoading(false);
+                        if (
+                                err.response &&
+                                err.response.data &&
+                                err.response.data.message
+                        ) {
+                                setError(err.response.data.message);
+                        } else {
+                                setError("Ocorreu um erro inesperado.");
+                        }
                 }
         };
 
         return (
-                <div className="adicionar-produto-screen">
-                        <div className="adicionar-produto-container">
-                                <h2>
-                                        <FaBox /> Adicionar Produto
-                                </h2>
-                                {error && (
-                                        <div className="error-message">
-                                                {error}
-                                        </div>
-                                )}
-                                <form onSubmit={handleSubmit}>
-                                        <div className="form-group">
-                                                <label htmlFor="nome">
-                                                        Nome
-                                                </label>
-                                                <input
-                                                        type="text"
-                                                        id="nome"
-                                                        name="nome"
-                                                        value={formData.nome}
-                                                        onChange={handleChange}
-                                                        required
-                                                        placeholder="Digite o nome do produto"
-                                                />
-                                        </div>
+                <Container
+                        fluid
+                        className="d-flex justify-content-center align-items-center"
+                        style={{ minHeight: "100vh" }}
+                >
+                        <Row className="w-100">
+                                <Col md={6} lg={4} className="mx-auto">
+                                        <div className="adicionar-produto-screen">
+                                                <h2 className="text-center mb-4">
+                                                        Adicionar Produto
+                                                </h2>
+                                                {error && (
+                                                        <Alert variant="danger">
+                                                                {error}
+                                                        </Alert>
+                                                )}
+                                                <Form onSubmit={handleSubmit}>
+                                                        <Form.Group
+                                                                controlId="nome"
+                                                                className="mb-3"
+                                                        >
+                                                                <Form.Label>
+                                                                        Nome
+                                                                </Form.Label>
+                                                                <Form.Control
+                                                                        type="text"
+                                                                        value={
+                                                                                nome
+                                                                        }
+                                                                        onChange={(
+                                                                                e,
+                                                                        ) =>
+                                                                                setNome(
+                                                                                        e
+                                                                                                .target
+                                                                                                .value,
+                                                                                )
+                                                                        }
+                                                                        required
+                                                                        placeholder="Digite o nome do produto"
+                                                                />
+                                                        </Form.Group>
 
-                                        <div className="form-group">
-                                                <label htmlFor="descricao">
-                                                        Descrição
-                                                </label>
-                                                <textarea
-                                                        id="descricao"
-                                                        name="descricao"
-                                                        value={
-                                                                formData.descricao
-                                                        }
-                                                        onChange={handleChange}
-                                                        placeholder="Digite a descrição do produto"
-                                                />
-                                        </div>
+                                                        <Form.Group
+                                                                controlId="descricao"
+                                                                className="mb-3"
+                                                        >
+                                                                <Form.Label>
+                                                                        Descrição
+                                                                </Form.Label>
+                                                                <Form.Control
+                                                                        type="text"
+                                                                        value={
+                                                                                descricao
+                                                                        }
+                                                                        onChange={(
+                                                                                e,
+                                                                        ) =>
+                                                                                setDescricao(
+                                                                                        e
+                                                                                                .target
+                                                                                                .value,
+                                                                                )
+                                                                        }
+                                                                        placeholder="Digite a descrição do produto"
+                                                                />
+                                                        </Form.Group>
 
-                                        <div className="form-row">
-                                                <div className="form-group">
-                                                        <label htmlFor="preco">
-                                                                Preço
-                                                        </label>
-                                                        <input
-                                                                type="number"
-                                                                id="preco"
-                                                                name="preco"
-                                                                value={
-                                                                        formData.preco
-                                                                }
-                                                                onChange={
-                                                                        handleChange
-                                                                }
-                                                                required
-                                                                placeholder="Digite o preço"
-                                                        />
-                                                </div>
+                                                        <Form.Group
+                                                                controlId="preco"
+                                                                className="mb-3"
+                                                        >
+                                                                <Form.Label>
+                                                                        Preço
+                                                                </Form.Label>
+                                                                <Form.Control
+                                                                        type="number"
+                                                                        value={
+                                                                                preco
+                                                                        }
+                                                                        onChange={(
+                                                                                e,
+                                                                        ) =>
+                                                                                setPreco(
+                                                                                        e
+                                                                                                .target
+                                                                                                .value,
+                                                                                )
+                                                                        }
+                                                                        required
+                                                                        placeholder="Digite o preço"
+                                                                />
+                                                        </Form.Group>
 
-                                                <div className="form-group">
-                                                        <label htmlFor="stockTotal">
-                                                                Stock Total
-                                                        </label>
-                                                        <input
-                                                                type="number"
-                                                                id="stockTotal"
-                                                                name="stockTotal"
-                                                                value={
-                                                                        formData.stockTotal
-                                                                }
-                                                                onChange={
-                                                                        handleChange
-                                                                }
-                                                                required
-                                                                placeholder="Digite o Stock total"
-                                                        />
-                                                </div>
-                                        </div>
+                                                        <Form.Group
+                                                                controlId="stockTotal"
+                                                                className="mb-3"
+                                                        >
+                                                                <Form.Label>
+                                                                        Estoque
+                                                                        Total
+                                                                </Form.Label>
+                                                                <Form.Control
+                                                                        type="number"
+                                                                        value={
+                                                                                stockTotal
+                                                                        }
+                                                                        onChange={(
+                                                                                e,
+                                                                        ) =>
+                                                                                setStockTotal(
+                                                                                        e
+                                                                                                .target
+                                                                                                .value,
+                                                                                )
+                                                                        }
+                                                                        required
+                                                                        placeholder="Digite o estoque total"
+                                                                />
+                                                        </Form.Group>
 
-                                        <div className="form-row">
-                                                <div className="form-group">
-                                                        <label htmlFor="stockMinimo">
-                                                                Stock Mínimo
-                                                        </label>
-                                                        <input
-                                                                type="number"
-                                                                id="stockMinimo"
-                                                                name="stockMinimo"
-                                                                value={
-                                                                        formData.stockMinimo
-                                                                }
-                                                                onChange={
-                                                                        handleChange
-                                                                }
-                                                                placeholder="Digite o Stock mínimo"
-                                                        />
-                                                </div>
+                                                        <Form.Group
+                                                                controlId="stockMinimo"
+                                                                className="mb-3"
+                                                        >
+                                                                <Form.Label>
+                                                                        Estoque
+                                                                        Mínimo
+                                                                </Form.Label>
+                                                                <Form.Control
+                                                                        type="number"
+                                                                        value={
+                                                                                stockMinimo
+                                                                        }
+                                                                        onChange={(
+                                                                                e,
+                                                                        ) =>
+                                                                                setStockMinimo(
+                                                                                        e
+                                                                                                .target
+                                                                                                .value,
+                                                                                )
+                                                                        }
+                                                                        placeholder="Digite o estoque mínimo"
+                                                                />
+                                                        </Form.Group>
 
-                                                <div className="form-group">
-                                                        <label htmlFor="categoriaId">
-                                                                Categoria
-                                                        </label>
-                                                        <select
-                                                                id="categoriaId"
-                                                                name="categoriaId"
-                                                                value={
-                                                                        formData.categoriaId
-                                                                }
-                                                                onChange={
-                                                                        handleChange
+                                                        {/* Campo para escolher a categoria */}
+                                                        <Form.Group
+                                                                controlId="categoria"
+                                                                className="mb-3"
+                                                        >
+                                                                <Form.Label>
+                                                                        Categoria
+                                                                </Form.Label>
+                                                                <Form.Control
+                                                                        as="select"
+                                                                        value={
+                                                                                categoriaId
+                                                                        }
+                                                                        onChange={(
+                                                                                e,
+                                                                        ) =>
+                                                                                setCategoriaId(
+                                                                                        e
+                                                                                                .target
+                                                                                                .value,
+                                                                                )
+                                                                        }
+                                                                >
+                                                                        <option value="">
+                                                                                Selecione
+                                                                                uma
+                                                                                categoria
+                                                                        </option>
+                                                                        {categorias.map(
+                                                                                (
+                                                                                        categoria,
+                                                                                ) => (
+                                                                                        <option
+                                                                                                key={
+                                                                                                        categoria._id
+                                                                                                }
+                                                                                                value={
+                                                                                                        categoria._id
+                                                                                                }
+                                                                                        >
+                                                                                                {
+                                                                                                        categoria.nome
+                                                                                                }
+                                                                                        </option>
+                                                                                ),
+                                                                        )}
+                                                                </Form.Control>
+                                                        </Form.Group>
+
+                                                        <Button
+                                                                type="submit"
+                                                                variant="primary"
+                                                                className="w-100"
+                                                                disabled={
+                                                                        loading
                                                                 }
                                                         >
-                                                                <option value="">
-                                                                        Selecione
-                                                                        uma
-                                                                        categoria
-                                                                </option>
-                                                                {categorias.map(
-                                                                        (
-                                                                                categoria,
-                                                                        ) => (
-                                                                                <option
-                                                                                        key={
-                                                                                                categoria._id
-                                                                                        }
-                                                                                        value={
-                                                                                                categoria._id
-                                                                                        }
-                                                                                >
-                                                                                        {
-                                                                                                categoria.nome
-                                                                                        }
-                                                                                </option>
-                                                                        ),
-                                                                )}
-                                                        </select>
-                                                </div>
+                                                                {loading
+                                                                        ? "Adicionando..."
+                                                                        : "Adicionar Produto"}
+                                                        </Button>
+                                                </Form>
                                         </div>
-
-                                        <button
-                                                type="submit"
-                                                className="submit-button"
-                                                disabled={loading}
-                                        >
-                                                {loading ? (
-                                                        "Adicionando..."
-                                                ) : (
-                                                        <>
-                                                                <FaSave />{" "}
-                                                                Adicionar
-                                                                Produto
-                                                        </>
-                                                )}
-                                        </button>
-                                </form>
-                        </div>
-                </div>
+                                </Col>
+                        </Row>
+                </Container>
         );
 };
 
