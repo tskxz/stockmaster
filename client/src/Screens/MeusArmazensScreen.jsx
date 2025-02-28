@@ -84,7 +84,7 @@ const MeusArmazensScreen = () => {
                                 <div className="empty-state">
                                         <p>
                                                 Você não tem armazéns
-                                                cadastrados.
+                                                registados.
                                         </p>
                                         <button
                                                 onClick={() =>

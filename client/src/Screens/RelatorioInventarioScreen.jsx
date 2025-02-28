@@ -18,7 +18,7 @@ const RelatorioInventarioScreen = () => {
         const token = localStorage.getItem("jwt");
 
         if (!token) {
-          throw new Error("Usuário não autenticado. Faça login novamente.");
+          throw new Error("utilizador não autenticado. Faça login novamente.");
         }
 
         const { data } = await axios.get("http://localhost:8000/api/empresas/relatorio_inventario", {

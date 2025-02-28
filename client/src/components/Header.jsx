@@ -9,7 +9,7 @@ import "../styles/components/Header.css";
 const Header = () => {
         const navigate = useNavigate();
 
-        // Verifica se o usuário está autenticado (token JWT presente no localStorage)
+        // Verifica se o utilizador está autenticado (token JWT presente no localStorage)
         const token = localStorage.getItem("jwt");
 
         // Função de logout
@@ -33,7 +33,7 @@ const Header = () => {
                                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                                         <Navbar.Collapse id="basic-navbar-nav">
                                                 <Nav className="ms-auto">
-                                                        {/* Se o usuário não estiver autenticado, exibe o link de Login */}
+                                                        {/* Se o utilizador não estiver autenticado, exibe o link de Login */}
                                                         {!token ? (
                                                                 <Nav.Link href="/login">
                                                                         <FaUser
@@ -58,7 +58,7 @@ const Header = () => {
                                                                         />{" "}
                                                                 </Nav.Link>
                                                         ) : (
-                                                                // Se o usuário estiver autenticado, exibe o link de Logout
+                                                                // Se o utilizador estiver autenticado, exibe o link de Logout
                                                                 <Nav.Link
                                                                         onClick={
                                                                                 handleLogout
